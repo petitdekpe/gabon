@@ -1,3 +1,153 @@
-body {
-    background-color: skyblue;
+/* Bandeau tricolore du drapeau gabonais, fixé en haut de la fenêtre */
+.gab-flag-stripe {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--gab-topbar-stripe-height);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  z-index: 1100;
+}
+
+.gab-flag-stripe span:nth-child(1) { background-color: var(--color-primary); }
+.gab-flag-stripe span:nth-child(2) { background-color: var(--color-secondary); }
+.gab-flag-stripe span:nth-child(3) { background-color: var(--color-tertiary); }
+
+/* Barre de navigation MD3 */
+.gab-topbar {
+  position: fixed;
+  top: var(--gab-topbar-stripe-height);
+  left: 0;
+  right: 0;
+  height: var(--gab-header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gab-space-3);
+  padding: 0 var(--gab-space-4);
+  background-color: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 12%);
+  z-index: 1000;
+}
+
+.gab-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--gab-space-2);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gab-topbar__brand-mark {
+  display: inline-flex;
+  width: 28px;
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex: none;
+  box-shadow: 0 0 0 1px var(--md-sys-color-outline-variant);
+}
+
+.gab-topbar__brand-mark span { flex: 1; }
+.gab-topbar__brand-mark span:nth-child(1) { background-color: var(--color-primary); }
+.gab-topbar__brand-mark span:nth-child(2) { background-color: var(--color-secondary); }
+.gab-topbar__brand-mark span:nth-child(3) { background-color: var(--color-tertiary); }
+
+.gab-topbar__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--gab-space-2);
+}
+
+/* Structure de page */
+.gab-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding-top: calc(var(--gab-topbar-stripe-height) + var(--gab-header-height));
+}
+
+.gab-main {
+  width: 100%;
+  max-width: var(--gab-max-width);
+  margin-inline: auto;
+  padding: var(--gab-space-4) var(--gab-space-3);
+  display: grid;
+  gap: var(--gab-space-4);
+}
+
+/* Footer */
+.gab-footer {
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  padding: var(--gab-space-4) var(--gab-space-3);
+  text-align: center;
+  font-size: 0.85rem;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* Zone flash messages */
+.gab-flash-region {
+  position: fixed;
+  top: calc(var(--gab-topbar-stripe-height) + var(--gab-header-height) + var(--gab-space-2));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(560px, calc(100% - var(--gab-space-3) * 2));
+  display: grid;
+  gap: var(--gab-space-2);
+  z-index: 1300;
+  pointer-events: none;
+}
+
+.gab-banner {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--gab-space-2);
+  padding: var(--gab-space-2) var(--gab-space-3);
+  border-radius: var(--gab-radius-sm);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 18%);
+  font-size: 0.9rem;
+  animation: gab-banner-in 200ms ease-out;
+}
+
+.gab-banner__message { flex: 1; }
+
+.gab-banner--success {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.gab-banner--error {
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+}
+
+.gab-banner--warning {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.gab-banner--info {
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+}
+
+@keyframes gab-banner-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive mobile-first */
+@media (max-width: 600px) {
+  .gab-topbar { padding: 0 var(--gab-space-3); }
+  .gab-topbar__brand { font-size: 0.95rem; }
+  .gab-main { padding: var(--gab-space-3) var(--gab-space-2); }
 }

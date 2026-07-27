@@ -1,0 +1,225 @@
+/* Écran 1 — Votre identité */
+
+.gab-progress {
+  display: grid;
+  gap: var(--gab-space-1);
+}
+
+.gab-progress__label {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.gab-step-header {
+  display: grid;
+  gap: var(--gab-space-1);
+}
+
+.gab-step-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--md-sys-color-on-surface);
+}
+
+.gab-step-header__subtitle {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+form {
+  display: grid;
+  gap: var(--gab-space-4);
+}
+
+md-outlined-card.gab-section {
+  display: block;
+  padding: var(--gab-space-4);
+  border-radius: var(--gab-radius-md);
+}
+
+.gab-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gab-space-2);
+  margin-bottom: var(--gab-space-3);
+}
+
+.gab-section__title {
+  margin: 0 0 var(--gab-space-3);
+  font-size: 1.1rem;
+  color: var(--md-sys-color-on-surface);
+}
+
+.gab-section__header .gab-section__title {
+  margin: 0;
+}
+
+.gab-grid {
+  display: grid;
+  gap: var(--gab-space-3);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .gab-grid--2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.gab-field {
+  width: 100%;
+}
+
+.gab-field-group {
+  display: grid;
+  gap: var(--gab-space-2);
+}
+
+.gab-conditional {
+  overflow: hidden;
+  max-height: 200px;
+  opacity: 1;
+  transition: max-height 200ms ease, opacity 150ms ease, margin 200ms ease;
+}
+
+.gab-conditional[hidden] {
+  display: block;
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.gab-checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gab-space-2);
+  margin-bottom: var(--gab-space-3);
+  cursor: pointer;
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Badges de statut documentaire */
+.gab-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px var(--gab-space-2);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.gab-badge--valid {
+  background-color: color-mix(in srgb, #009e60 18%, transparent);
+  color: #00532f;
+}
+
+.gab-badge--warning {
+  background-color: color-mix(in srgb, #f59e0b 20%, transparent);
+  color: #7a4a00;
+}
+
+.gab-badge--expired {
+  background-color: color-mix(in srgb, #b91c1c 15%, transparent);
+  color: #7f1414;
+}
+
+.gab-badge--unknown {
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Durée de séjour */
+.gab-stay-duration {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: var(--gab-space-2) var(--gab-space-3);
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--gab-radius-sm);
+}
+
+.gab-stay-duration__label {
+  font-size: 0.78rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.gab-stay-duration__value {
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Zone d'upload */
+.gab-upload {
+  margin-top: var(--gab-space-3);
+}
+
+.gab-upload__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--gab-space-4);
+  border: 1.5px dashed var(--md-sys-color-outline);
+  border-radius: var(--gab-radius-sm);
+  cursor: pointer;
+  text-align: center;
+  color: var(--md-sys-color-on-surface-variant);
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.gab-upload__dropzone:hover,
+.gab-upload.gab-upload--dragover .gab-upload__dropzone {
+  border-color: var(--md-sys-color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 6%, transparent);
+}
+
+.gab-upload__dropzone--error {
+  border-color: var(--md-sys-color-error);
+  background-color: color-mix(in srgb, var(--color-error) 6%, transparent);
+}
+
+.gab-upload__label {
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.gab-upload__hint {
+  font-size: 0.78rem;
+}
+
+.gab-upload__filename {
+  font-size: 0.85rem;
+  color: var(--md-sys-color-primary);
+  font-weight: 600;
+}
+
+.gab-upload__filename:empty {
+  display: none;
+}
+
+.gab-upload__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.gab-field-error {
+  margin: var(--gab-space-1) 0 0;
+  font-size: 0.78rem;
+  color: var(--md-sys-color-error);
+}
+
+.gab-step-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: var(--gab-space-4);
+}

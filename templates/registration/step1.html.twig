@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+{% import 'registration/_form_macros.html.twig' as f %}
+
+{% block title %}Votre identité · Recensement diaspora gabonaise{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/registration.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="gab-progress">
+        <md-linear-progress value="0.5" aria-label="Étape 1 sur 2"></md-linear-progress>
+        <p class="gab-progress__label">Étape 1 sur 2</p>
+    </div>
+
+    <div class="gab-step-header">
+        <h1>Votre identité</h1>
+        <p class="gab-step-header__subtitle">Informations personnelles et documents administratifs</p>
+    </div>
+
+    {{ form_start(form, {attr: {
+        novalidate: 'novalidate',
+        'data-controller': 'step1',
+        'data-step1-target': 'form',
+        'data-action': 'submit->step1#validateBeforeSubmit',
+    }}) }}
+
+        <md-outlined-card class="gab-section">
+            <h2 class="gab-section__title">Identité civile</h2>
+            <div class="gab-grid gab-grid--2">
+                {{ f.select_field(form.country) }}
+                {{ f.text_field(form.lastName) }}
+                {{ f.text_field(form.firstName) }}
+                {{ f.text_field(form.birthDate, 'date') }}
+                {{ f.text_field(form.birthPlace) }}
+                {{ f.select_field(form.birthCountry) }}
+
+                <div class="gab-field-group">
+                    {{ f.select_field(form.profession, 'data-action="change->step1#toggleProfessionOther"') }}
+                    <div class="gab-conditional" data-step1-target="professionOtherWrapper"
+                         {% if form.profession.vars.value != 'other' %}hidden{% endif %}>
+                        {{ f.text_field(form.professionOther) }}
+                    </div>
+                </div>
+            </div>
+        </md-outlined-card>
+
+        <md-outlined-card class="gab-section">
+            <h2 class="gab-section__title">Téléphones</h2>
+            <div class="gab-grid gab-grid--2">
+                {{ f.text_field(form.localPhone, 'tel') }}
+                {{ f.text_field(form.gabonContact, 'tel') }}
+            </div>
+        </md-outlined-card>
+
+        <md-outlined-card class="gab-section">
+            <h2 class="gab-section__title">Séjour</h2>
+            <div class="gab-grid gab-grid--2">
+                {{ f.text_field(form.firstEntryDate, 'date', 'data-action="input->step1#updateStayDuration" data-step1-target="firstEntryDateInput"') }}
+                <div class="gab-stay-duration">
+                    <span class="gab-stay-duration__label">Durée de séjour</span>
+                    <span class="gab-stay-duration__value" data-step1-target="stayDuration">—</span>
+                </div>
+            </div>
+        </md-outlined-card>
+
+        <md-outlined-card class="gab-section">
+            <div class="gab-section__header">
+                <h2 class="gab-section__title">Passeport</h2>
+                <span class="gab-badge gab-badge--{{ documentStatuses.passport.level }}" data-step1-target="passportBadge">
+                    {{ documentStatuses.passport.label }}
+                </span>
+            </div>
+            <div class="gab-grid gab-grid--2">
+                {{ f.text_field(form.passportNumber) }}
+                {{ f.text_field(form.passportIssuedAt, 'date') }}
+                <div data-step1-target="passportExpiresAtWrapper">
+                    {{ f.text_field(form.passportExpiresAt, 'date', 'data-action="input->step1#updateDocumentBadges" data-doc-type="passport"') }}
+                </div>
+            </div>
+            {{ f.file_field(form.passportFile, 'application/pdf,image/jpeg,image/png', 'passport') }}
+        </md-outlined-card>
+
+        <md-outlined-card class="gab-section">
+            <div class="gab-section__header">
+                <h2 class="gab-section__title">Carte de résident</h2>
+                <span class="gab-badge gab-badge--{{ documentStatuses.residentCard.level }}" data-step1-target="residentCardBadge">
+                    {{ documentStatuses.residentCard.label }}
+                </span>
+            </div>
+
+            {{ f.checkbox_field(form.residentCardNotApplicable, 'data-action="change->step1#toggleResidentCard" data-step1-target="residentCardNotApplicable"') }}
+
+            <div class="gab-conditional" data-step1-target="residentCardFields"
+                 {% if form.residentCardNotApplicable.vars.checked %}hidden{% endif %}>
+                <div class="gab-grid gab-grid--2">
+                    {{ f.text_field(form.residentCardNumber) }}
+                    {{ f.text_field(form.residentCardIssuedAt, 'date') }}
+                    <div data-step1-target="residentCardExpiresAtWrapper">
+                        {{ f.text_field(form.residentCardExpiresAt, 'date', 'data-action="input->step1#updateDocumentBadges" data-doc-type="residentCard"') }}
+                    </div>
+                </div>
+                {{ f.file_field(form.residentCardFile, 'application/pdf,image/jpeg,image/png', 'residentCard') }}
+            </div>
+        </md-outlined-card>
+
+        <md-outlined-card class="gab-section">
+            <div class="gab-section__header">
+                <h2 class="gab-section__title">Carte consulaire</h2>
+                <span class="gab-badge gab-badge--{{ documentStatuses.consularCard.level }}" data-step1-target="consularCardBadge">
+                    {{ documentStatuses.consularCard.label }}
+                </span>
+            </div>
+            <div class="gab-grid gab-grid--2">
+                {{ f.text_field(form.consularCardNumber) }}
+                {{ f.text_field(form.consularCardIssuedAt, 'date') }}
+                <div data-step1-target="consularCardExpiresAtWrapper">
+                    {{ f.text_field(form.consularCardExpiresAt, 'date', 'data-action="input->step1#updateDocumentBadges" data-doc-type="consularCard"') }}
+                </div>
+            </div>
+            {{ f.file_field(form.consularCardFile, 'application/pdf,image/jpeg,image/png', 'consularCard') }}
+        </md-outlined-card>
+
+        <div class="gab-step-actions">
+            <md-filled-button type="submit">
+                Suivant
+                <md-icon slot="icon">arrow_forward</md-icon>
+            </md-filled-button>
+        </div>
+
+        {{ form_rest(form) }}
+    {{ form_end(form, {render_rest: false}) }}
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+{% endblock %}

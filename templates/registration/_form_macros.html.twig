@@ -1,0 +1,74 @@
+{% macro text_field(field, type = 'text', attrs = '') %}
+    {% do field.setRendered %}
+    <md-outlined-text-field
+        class="gab-field"
+        label="{{ field.vars.label }}"
+        name="{{ field.vars.full_name }}"
+        id="{{ field.vars.id }}"
+        type="{{ type }}"
+        value="{{ field.vars.value }}"
+        {{ field.vars.required ? 'required' : '' }}
+        {% if field.vars.errors|length > 0 %}error error-text="{{ field.vars.errors|first.message }}"{% endif %}
+        {{ attrs|raw }}
+    ></md-outlined-text-field>
+{% endmacro %}
+
+{% macro select_field(field, attrs = '') %}
+    {% do field.setRendered %}
+    <md-outlined-select
+        class="gab-field"
+        label="{{ field.vars.label }}"
+        name="{{ field.vars.full_name }}"
+        id="{{ field.vars.id }}"
+        {{ field.vars.required ? 'required' : '' }}
+        {% if field.vars.errors|length > 0 %}error error-text="{{ field.vars.errors|first.message }}"{% endif %}
+        {{ attrs|raw }}
+    >
+        {% for choice in field.vars.choices %}
+            <md-select-option value="{{ choice.value }}" {{ choice.value == field.vars.value ? 'selected' : '' }}>
+                <div slot="headline">{{ choice.label }}</div>
+            </md-select-option>
+        {% endfor %}
+    </md-outlined-select>
+{% endmacro %}
+
+{% macro checkbox_field(field, attrs = '') %}
+    {% do field.setRendered %}
+    <label class="gab-checkbox-row">
+        <md-checkbox
+            name="{{ field.vars.full_name }}"
+            id="{{ field.vars.id }}"
+            value="1"
+            {{ field.vars.checked ? 'checked' : '' }}
+            {{ attrs|raw }}
+        ></md-checkbox>
+        <span>{{ field.vars.label }}</span>
+    </label>
+{% endmacro %}
+
+{% macro file_field(field, accept, stimulusTarget) %}
+    {% do field.setRendered %}
+    <div class="gab-upload"
+         data-step1-target="{{ stimulusTarget }}Zone"
+         data-action="dragover->step1#dragOver dragleave->step1#dragLeave drop->step1#drop">
+        <label class="gab-upload__dropzone" for="{{ field.vars.id }}">
+            <md-icon>upload_file</md-icon>
+            <span class="gab-upload__label">{{ field.vars.label }}</span>
+            <span class="gab-upload__hint">PDF, JPEG ou PNG · 5 Mo max</span>
+            <span class="gab-upload__filename" data-step1-target="{{ stimulusTarget }}Name"></span>
+        </label>
+        <input
+            type="file"
+            class="gab-upload__input"
+            name="{{ field.vars.full_name }}"
+            id="{{ field.vars.id }}"
+            accept="{{ accept }}"
+            {{ field.vars.required ? 'required' : '' }}
+            data-step1-target="{{ stimulusTarget }}Input"
+            data-action="change->step1#previewFileName"
+        >
+        {% if field.vars.errors|length > 0 %}
+            <p class="gab-field-error">{{ field.vars.errors|first.message }}</p>
+        {% endif %}
+    </div>
+{% endmacro %}

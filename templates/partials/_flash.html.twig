@@ -1,0 +1,22 @@
+{% set gab_flash_icons = {
+    success: 'check_circle',
+    error: 'error',
+    danger: 'error',
+    warning: 'warning',
+    info: 'info',
+} %}
+
+<div class="gab-flash-region" aria-live="polite">
+    {% for type, messages in app.flashes %}
+        {% set gab_variant = type in ['success', 'error', 'danger', 'warning', 'info'] ? (type == 'danger' ? 'error' : type) : 'info' %}
+        {% for message in messages %}
+            <div class="gab-banner gab-banner--{{ gab_variant }}" role="{{ gab_variant == 'error' ? 'alert' : 'status' }}">
+                <md-icon>{{ gab_flash_icons[type]|default('info') }}</md-icon>
+                <span class="gab-banner__message">{{ message }}</span>
+                <md-icon-button type="button" aria-label="Fermer" onclick="this.closest('.gab-banner').remove()">
+                    <md-icon>close</md-icon>
+                </md-icon-button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
