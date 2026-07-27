@@ -223,3 +223,175 @@ md-outlined-card.gab-section {
   justify-content: flex-end;
   padding-bottom: var(--gab-space-4);
 }
+
+/* Écran 2 — Votre profil */
+
+.gab-checkbox-list {
+  display: grid;
+  gap: var(--gab-space-1);
+  margin-bottom: var(--gab-space-3);
+}
+
+.gab-radio-group {
+  border: none;
+  margin: 0 0 var(--gab-space-3);
+  padding: 0;
+}
+
+.gab-radio-group legend {
+  font-size: 0.85rem;
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: var(--gab-space-2);
+  padding: 0;
+}
+
+.gab-radio-group__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gab-space-3);
+}
+
+.gab-radio-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gab-space-2);
+  cursor: pointer;
+  color: var(--md-sys-color-on-surface);
+}
+
+.gab-radio-row--large {
+  padding: var(--gab-space-2) var(--gab-space-3);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--gab-radius-sm);
+  font-weight: 600;
+}
+
+.gab-radio-row--large:has(md-radio[checked]) {
+  border-color: var(--md-sys-color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+/* Champs répétables (CollectionType) */
+.gab-collection {
+  margin-top: var(--gab-space-2);
+  display: grid;
+  gap: var(--gab-space-2);
+}
+
+.gab-collection__label {
+  font-size: 0.85rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.gab-collection__item {
+  display: flex;
+  align-items: center;
+  gap: var(--gab-space-2);
+}
+
+.gab-collection__item .gab-field {
+  flex: 1;
+}
+
+.gab-collection__remove {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface-container-lowest);
+  color: var(--md-sys-color-error);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.gab-collection__remove:hover {
+  background-color: color-mix(in srgb, var(--color-error) 8%, transparent);
+}
+
+/* Consentement RGPD */
+.gab-consent {
+  padding: var(--gab-space-3) 0;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  margin-top: var(--gab-space-2);
+}
+
+.gab-consent .gab-checkbox-row {
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+
+.gab-checkbox-row--error {
+  outline: 1.5px solid var(--md-sys-color-error);
+  outline-offset: 4px;
+  border-radius: var(--gab-radius-sm);
+}
+
+.gab-consent a {
+  color: var(--md-sys-color-primary);
+}
+
+/* Accusé de réception */
+.gab-confirmation {
+  display: flex;
+  justify-content: center;
+  padding: var(--gab-space-5) 0;
+}
+
+.gab-confirmation__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 560px;
+  width: 100%;
+  padding: var(--gab-space-5) var(--gab-space-4) 0;
+  border-radius: var(--gab-radius-lg);
+  overflow: hidden;
+}
+
+.gab-confirmation__icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #009e60;
+  margin-bottom: var(--gab-space-3);
+}
+
+.gab-confirmation__title {
+  margin: 0 0 var(--gab-space-4);
+  font-size: 1.4rem;
+  color: var(--md-sys-color-on-surface);
+}
+
+.gab-confirmation__reference-label {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.gab-confirmation__reference {
+  margin: 4px 0 var(--gab-space-4);
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #003f8a;
+}
+
+.gab-confirmation__message {
+  margin: 0 0 var(--gab-space-5);
+  color: var(--md-sys-color-on-surface-variant);
+  max-width: 40ch;
+}
+
+.gab-confirmation__flag {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  height: 8px;
+}
+
+.gab-confirmation__flag span:nth-child(1) { background-color: var(--color-primary); }
+.gab-confirmation__flag span:nth-child(2) { background-color: var(--color-secondary); }
+.gab-confirmation__flag span:nth-child(3) { background-color: var(--color-tertiary); }

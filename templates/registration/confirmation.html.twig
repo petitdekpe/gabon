@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dossier enregistré · Recensement diaspora gabonaise{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/registration.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="gab-confirmation">
+        <md-outlined-card class="gab-confirmation__card">
+            <md-icon class="gab-confirmation__icon">check_circle</md-icon>
+
+            <h1 class="gab-confirmation__title">Votre dossier a bien été enregistré</h1>
+
+            <p class="gab-confirmation__reference-label">Numéro de référence</p>
+            <p class="gab-confirmation__reference">{{ registrant.reference }}</p>
+
+            <p class="gab-confirmation__message">
+                Merci {{ registrant.firstName }} {{ registrant.lastName }}. Le Bureau Exécutif de l'AGB
+                vous contactera prochainement.
+            </p>
+
+            <div class="gab-confirmation__flag" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </div>
+        </md-outlined-card>
+    </div>
+{% endblock %}

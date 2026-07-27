@@ -1,19 +1,183 @@
 {% extends 'base.html.twig' %}
+{% import 'registration/_form_macros.html.twig' as f %}
 
-{% block title %}Étape 2 · Recensement diaspora gabonaise{% endblock %}
+{% block title %}Votre profil · Recensement diaspora gabonaise{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/registration.css') }}">
+{% endblock %}
 
 {% block content %}
-    <div class="gab-progress">
-        <md-linear-progress value="1" aria-label="Étape 2 sur 2"></md-linear-progress>
-        <p class="gab-progress__label">Étape 2 sur 2</p>
-    </div>
+    <div data-controller="step2" data-step2-initial-profile-value="{{ initialProfileType|default('') }}">
+        <div class="gab-progress">
+            <md-linear-progress value="1.0" aria-label="Étape 2 sur 2"></md-linear-progress>
+            <p class="gab-progress__label">Étape 2 sur 2</p>
+        </div>
 
-    <md-outlined-card style="display:block; padding: 24px; border-radius: 16px;">
-        <h1>Identité enregistrée</h1>
-        <p>
-            Merci {{ registrant.firstName }} {{ registrant.lastName }}, votre identité a bien été
-            enregistrée pour la session en cours.
-        </p>
-        <p><em>L'écran 2 (profil étudiant / salarié / entrepreneur) sera construit dans une prochaine étape.</em></p>
-    </md-outlined-card>
+        <div class="gab-step-header">
+            <h1>Votre profil</h1>
+            <p class="gab-step-header__subtitle">Dites-nous où vous en êtes pour que le Bureau Exécutif puisse mieux vous accompagner</p>
+        </div>
+
+        <md-outlined-card class="gab-section">
+            <h2 class="gab-section__title">Choisissez votre profil</h2>
+            <div class="gab-radio-group__options">
+                <label class="gab-radio-row gab-radio-row--large">
+                    <md-radio
+                        name="profileTypeSelector"
+                        value="student"
+                        {{ initialProfileType == 'student' ? 'checked' : '' }}
+                        data-action="change->step2#onProfileTypeChange"
+                    ></md-radio>
+                    <span>Étudiant</span>
+                </label>
+                <label class="gab-radio-row gab-radio-row--large">
+                    <md-radio
+                        name="profileTypeSelector"
+                        value="employee"
+                        {{ initialProfileType == 'employee' ? 'checked' : '' }}
+                        data-action="change->step2#onProfileTypeChange"
+                    ></md-radio>
+                    <span>Salarié du privé</span>
+                </label>
+                <label class="gab-radio-row gab-radio-row--large">
+                    <md-radio
+                        name="profileTypeSelector"
+                        value="entrepreneur"
+                        {{ initialProfileType == 'entrepreneur' ? 'checked' : '' }}
+                        data-action="change->step2#onProfileTypeChange"
+                    ></md-radio>
+                    <span>Entrepreneur</span>
+                </label>
+            </div>
+            <p class="gab-field-error" data-step2-target="profileSelectionError" hidden>Merci de choisir un profil avant de continuer.</p>
+        </md-outlined-card>
+
+        {# ============ ÉTUDIANT ============ #}
+        <div data-profile="student" data-step2-target="section" {% if initialProfileType != 'student' %}hidden{% endif %}>
+            {{ form_start(studentForm, {attr: {novalidate: 'novalidate', 'data-action': 'submit->step2#validateBeforeSubmit'}}) }}
+                <md-outlined-card class="gab-section">
+                    <h2 class="gab-section__title">Votre formation</h2>
+                    <div class="gab-checkbox-list">
+                        {{ f.checkbox_field(studentForm.inTraining) }}
+                        {{ f.checkbox_field(studentForm.endOfCycle) }}
+                        {{ f.checkbox_field(studentForm.awaitingDefense) }}
+                        {{ f.checkbox_field(studentForm.graduatedJobSeeking) }}
+                    </div>
+                    <div class="gab-grid gab-grid--2">
+                        {{ f.text_field(studentForm.institution) }}
+                    </div>
+                </md-outlined-card>
+
+                <md-outlined-card class="gab-section">
+                    <h2 class="gab-section__title">Projet de retour</h2>
+                    {{ f.radio_group_field(studentForm.wishReturnGabon) }}
+                    <div class="gab-grid gab-grid--2">
+                        {{ f.text_field(studentForm.targetAdministration) }}
+                    </div>
+                    {{ f.collection_field(studentForm.otherAdministrations, 'step2', 4) }}
+                </md-outlined-card>
+
+                <md-outlined-card class="gab-section">
+                    <h2 class="gab-section__title">Diplôme</h2>
+                    {{ f.file_field(studentForm.diplomaFile, 'application/pdf,image/jpeg,image/png', 'diploma', 'step2') }}
+                </md-outlined-card>
+
+                {% include 'registration/_consent_submit.html.twig' %}
+
+                {{ form_rest(studentForm) }}
+            {{ form_end(studentForm, {render_rest: false}) }}
+        </div>
+
+        {# ============ SALARIÉ ============ #}
+        <div data-profile="employee" data-step2-target="section" {% if initialProfileType != 'employee' %}hidden{% endif %}>
+            {{ form_start(employeeForm, {attr: {novalidate: 'novalidate', 'data-action': 'submit->step2#validateBeforeSubmit'}}) }}
+                <md-outlined-card class="gab-section">
+                    <h2 class="gab-section__title">Parcours</h2>
+                    <div class="gab-grid gab-grid--2">
+                        <div class="gab-field-group">
+                            {{ f.select_field(employeeForm.lastDegree, 'data-action="change->step2#toggleOtherField" data-other-target="lastDegreeOtherWrapper"') }}
+                            <div class="gab-conditional" data-step2-target="lastDegreeOtherWrapper" {% if employeeForm.lastDegree.vars.value != 'other' %}hidden{% endif %}>
+                                {{ f.text_field(employeeForm.lastDegreeOther) }}
+                            </div>
+                        </div>
+                        {{ f.text_field(employeeForm.firstJobYear, 'number') }}
+                    </div>
+                </md-outlined-card>
+
+                <md-outlined-card class="gab-section">
+                    <h2 class="gab-section__title">Emploi actuel</h2>
+                    <div class="gab-grid gab-grid--2">
+                        <div class="gab-field-group">
+                            {{ f.select_field(employeeForm.activitySector, 'data-action="change->step2#toggleOtherField" data-other-target="employeeSectorOtherWrapper"') }}
+                            <div class="gab-conditional" data-step2-target="employeeSectorOtherWrapper" {% if employeeForm.activitySector.vars.value != 'other' %}hidden{% endif %}>
+                                {{ f.text_field(employeeForm.activitySectorOther) }}
+                            </div>
+                        </div>
+                        {{ f.text_field(employeeForm.jobTitle) }}
+                        {{ f.text_field(employeeForm.currentCompany) }}
+                    </div>
+                </md-outlined-card>
+
+                <md-outlined-card class="gab-section">
+                    <h2 class="gab-section__title">Projet professionnel au Gabon</h2>
+                    {{ f.radio_group_field(employeeForm.wishIntegrateGabon) }}
+                    <div class="gab-grid gab-grid--2">
+                        {{ f.text_field(employeeForm.targetCompany) }}
+                    </div>
+                    {{ f.collection_field(employeeForm.otherCompanies, 'step2', 4) }}
+                </md-outlined-card>
+
+                <md-outlined-card class="gab-section">
+                    <h2 class="gab-section__title">CV</h2>
+                    {{ f.file_field(employeeForm.cvFile, 'application/pdf,image/jpeg,image/png', 'cv', 'step2') }}
+                </md-outlined-card>
+
+                {% include 'registration/_consent_submit.html.twig' %}
+
+                {{ form_rest(employeeForm) }}
+            {{ form_end(employeeForm, {render_rest: false}) }}
+        </div>
+
+        {# ============ ENTREPRENEUR ============ #}
+        <div data-profile="entrepreneur" data-step2-target="section" {% if initialProfileType != 'entrepreneur' %}hidden{% endif %}>
+            {{ form_start(entrepreneurForm, {attr: {novalidate: 'novalidate', 'data-action': 'submit->step2#validateBeforeSubmit'}}) }}
+                <md-outlined-card class="gab-section">
+                    <h2 class="gab-section__title">Votre entreprise</h2>
+                    <div class="gab-grid gab-grid--2">
+                        {{ f.text_field(entrepreneurForm.companyName) }}
+                        {{ f.text_field(entrepreneurForm.officialCreatedAt, 'date') }}
+                        {{ f.select_field(entrepreneurForm.legalStatus) }}
+                        {{ f.text_field(entrepreneurForm.registrationNumber) }}
+                    </div>
+                    <div class="gab-field-group">
+                        {{ f.select_field(entrepreneurForm.activitySector, 'data-action="change->step2#toggleOtherField" data-other-target="entrepreneurSectorOtherWrapper"') }}
+                        <div class="gab-conditional" data-step2-target="entrepreneurSectorOtherWrapper" {% if entrepreneurForm.activitySector.vars.value != 'other' %}hidden{% endif %}>
+                            {{ f.text_field(entrepreneurForm.activitySectorOther) }}
+                        </div>
+                    </div>
+                </md-outlined-card>
+
+                <md-outlined-card class="gab-section">
+                    <h2 class="gab-section__title">Projet au Gabon</h2>
+                    {{ f.radio_group_field(entrepreneurForm.hasGabonProject) }}
+                    <div class="gab-grid gab-grid--2">
+                        {{ f.text_field(entrepreneurForm.investmentSector) }}
+                    </div>
+                    {{ f.radio_group_field(entrepreneurForm.hasBusinessPlan) }}
+                    {{ f.collection_field(entrepreneurForm.otherTargets, 'step2', 4) }}
+                </md-outlined-card>
+
+                <md-outlined-card class="gab-section">
+                    <h2 class="gab-section__title">Business plan</h2>
+                    {{ f.file_field(entrepreneurForm.businessPlanFile, 'application/pdf,image/jpeg,image/png', 'businessPlan', 'step2') }}
+                </md-outlined-card>
+
+                {% include 'registration/_consent_submit.html.twig' %}
+
+                {{ form_rest(entrepreneurForm) }}
+            {{ form_end(entrepreneurForm, {render_rest: false}) }}
+        </div>
+    </div>
 {% endblock %}

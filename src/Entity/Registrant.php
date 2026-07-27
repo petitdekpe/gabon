@@ -23,6 +23,9 @@ class Registrant
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
+    #[ORM\Column(length: 20, unique: true, nullable: true)]
+    private ?string $reference = null;
+
     #[ORM\Column(length: 2)]
     #[Assert\NotBlank]
     #[Assert\Choice(callback: [AfricanCountry::class, 'codes'])]
@@ -68,14 +71,14 @@ class Registrant
     private ?\DateTimeImmutable $firstEntryDate = null;
 
     #[ORM\Column(length: 20, enumType: ProfileType::class)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(groups: ['step2_completion'])]
     private ?ProfileType $profileType = null;
 
     #[ORM\Column(length: 20, enumType: RegistrantStatus::class)]
     private RegistrantStatus $status = RegistrantStatus::Draft;
 
     #[ORM\Column]
-    #[Assert\IsTrue]
+    #[Assert\IsTrue(groups: ['step2_completion'])]
     private bool $consentGiven = false;
 
     #[ORM\OneToOne(targetEntity: IdentityDocument::class, cascade: ['persist', 'remove'])]
@@ -113,6 +116,18 @@ class Registrant
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(?string $reference): static
+    {
+        $this->reference = $reference;
+
+        return $this;
     }
 
     public function getCountry(): string
