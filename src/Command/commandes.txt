@@ -1,0 +1,16 @@
+php bin/console app:admin:create <email>
+
+--password= ou mot de passe aléatoire généré et affiché une seule fois si omis
+--role=ADMIN|ADMIN_READER (défaut ADMIN)
+--inactive pour créer un compte désactivé
+--update pour changer le mot de passe/rôle d'un compte existant (sinon erreur si l'e-mail est déjà pris)
+Valide l'entité (format e-mail) avant persistance
+
+
+php bin/console app:admin:delete <email>
+
+Confirmation interactive avant suppression (--force pour l'ignorer)
+Refuse de supprimer le dernier compte ROLE_ADMIN actif, pour ne jamais se retrouver verrouillé hors du back-office
+Les deux journalisent l'action dans AuditLog (admin.create / admin.update / admin.delete, source cli).
+
+Testé en conditions réelles sur la base de dev : création, blocage du doublon sans --update, blocage de la suppression du dernier admin, suppression réussie d'un compte lecteur, et entrées d'audit vérifiées en base.

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recensement de la diaspora gabonaise{% endblock %}
+
+{% block content %}
+    <div class="gab-hero">
+        <h1>Recensement de la diaspora gabonaise</h1>
+        <p class="gab-hero__lead">
+            Faites-vous connaître auprès du Bureau Exécutif de l'AGB en quelques minutes,
+            où que vous soyez en Zone Afrique.
+        </p>
+        <md-filled-button href="{{ path('register_step1') }}" style="--md-filled-button-container-color: #009e60;">
+            Commencer mon inscription
+            <md-icon slot="icon">arrow_forward</md-icon>
+        </md-filled-button>
+    </div>
+
+    <div class="gab-install" data-controller="pwa-install">
+        <h2 class="gab-install__title">Installez l'application sur votre téléphone</h2>
+        <p class="gab-install__lead">
+            Ajoutez Diaspora Gabonaise à votre écran d'accueil pour y accéder en un geste.
+        </p>
+
+        <md-outlined-button hidden data-pwa-install-target="installButton" data-action="click->pwa-install#install">
+            Installer l'application
+            <md-icon slot="icon">download</md-icon>
+        </md-outlined-button>
+
+        <p class="gab-install__hint" hidden data-pwa-install-target="iosInstructions">
+            Sur iPhone/iPad&nbsp;: appuyez sur <md-icon class="gab-install__inline-icon">ios_share</md-icon> puis « Sur l'écran d'accueil ».
+        </p>
+
+        <p class="gab-install__hint" hidden data-pwa-install-target="alreadyInstalled">
+            ✓ L'application est déjà installée sur cet appareil.
+        </p>
+    </div>
+{% endblock %}

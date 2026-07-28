@@ -7,6 +7,15 @@
         <title>{% block title %}Recensement de la diaspora gabonaise{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><rect width=%22128%22 height=%2242.6%22 fill=%22%23009e60%22/><rect y=%2242.6%22 width=%22128%22 height=%2242.8%22 fill=%22%23fcd116%22/><rect y=%2285.4%22 width=%22128%22 height=%2242.6%22 fill=%22%23003f8a%22/></svg>">
 
+        {# Installation sur l'écran d'accueil (PWA) — fichiers servis tels quels
+           depuis public/, hors du périmètre d'AssetMapper (asset() ne convient pas ici) #}
+        <link rel="manifest" href="{{ path('pwa_manifest') }}">
+        <meta name="theme-color" content="#009e60">
+        <link rel="apple-touch-icon" href="/icons/icon-192.png">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="Diaspora Gabonaise">
+
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&display=swap">
@@ -33,7 +42,7 @@
             </div>
 
             <header class="gab-topbar">
-                <a class="gab-topbar__brand" href="/">
+                <a class="gab-topbar__brand" href="{{ path('app_home') }}">
                     <span class="gab-topbar__brand-mark" aria-hidden="true">
                         <span></span><span></span><span></span>
                     </span>

@@ -1,3 +1,55 @@
+/* Page d'accueil */
+.gab-hero {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: var(--gab-space-3);
+  max-width: 560px;
+  margin: var(--gab-space-5) auto;
+  padding: var(--gab-space-4);
+}
+
+.gab-hero h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--md-sys-color-on-surface);
+}
+
+.gab-hero__lead {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Installation PWA (bas de page d'accueil) */
+.gab-install {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: var(--gab-space-2);
+  max-width: 480px;
+  margin: 0 auto var(--gab-space-5);
+  padding: var(--gab-space-4);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.gab-install__title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--md-sys-color-on-surface);
+}
+
+.gab-install__lead,
+.gab-install__hint {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.gab-install__inline-icon {
+  font-size: 1.1em;
+  vertical-align: middle;
+}
+
 /* Bandeau tricolore du drapeau gabonais, fixé en haut de la fenêtre */
 .gab-flag-stripe {
   position: fixed;
