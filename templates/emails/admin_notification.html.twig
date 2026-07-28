@@ -1,0 +1,16 @@
+{% extends 'emails/_layout.html.twig' %}
+
+{% block body %}
+    <h1 style="font-size: 1.3rem;">Nouvelle inscription — {{ deployment.label }}</h1>
+    <p>Un nouveau dossier vient d'être soumis :</p>
+
+    <table style="width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem;">
+        <tr><td style="padding: 4px 0; color: #5c6b64;">Référence</td><td style="padding: 4px 0;">{{ registrant.reference }}</td></tr>
+        <tr><td style="padding: 4px 0; color: #5c6b64;">Nom</td><td style="padding: 4px 0;">{{ registrant.lastName }} {{ registrant.firstName }}</td></tr>
+        <tr><td style="padding: 4px 0; color: #5c6b64;">Profil</td><td style="padding: 4px 0;">{{ registrant.profileType.value == 'student' ? 'Étudiant' : (registrant.profileType.value == 'employee' ? 'Salarié du privé' : 'Entrepreneur') }}</td></tr>
+        <tr><td style="padding: 4px 0; color: #5c6b64;">E-mail</td><td style="padding: 4px 0;">{{ registrant.email }}</td></tr>
+        <tr><td style="padding: 4px 0; color: #5c6b64;">Téléphone local</td><td style="padding: 4px 0;">{{ registrant.localPhone }}</td></tr>
+    </table>
+
+    <p>Consultez la fiche complète depuis le back-office administrateur.</p>
+{% endblock %}

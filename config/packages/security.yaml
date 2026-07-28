@@ -5,13 +5,38 @@ security:
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
+        admin_users:
+            entity:
+                class: App\Entity\AdminUser
+                property: email
         users_in_memory: { memory: null }
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_ADMIN_READER
 
     firewalls:
         dev:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+
+        admin:
+            pattern: ^/admin
+            lazy: true
+            provider: admin_users
+            user_checker: App\Security\AdminUserChecker
+            form_login:
+                login_path: admin_login
+                check_path: admin_login
+                username_parameter: email
+                password_parameter: password
+                default_target_path: admin_dashboard
+                enable_csrf: true
+            logout:
+                path: admin_logout
+                target: admin_login
+            access_denied_handler: App\Security\AdminAccessDeniedHandler
+
         main:
             lazy: true
             provider: users_in_memory
@@ -24,8 +49,10 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/registrants/[^/]+$, methods: [DELETE], roles: ROLE_ADMIN }
+        - { path: ^/admin/export, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN_READER }
 
 when@test:
     security:

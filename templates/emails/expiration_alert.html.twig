@@ -1,0 +1,14 @@
+{% extends 'emails/_layout.html.twig' %}
+
+{% block body %}
+    <h1 style="font-size: 1.3rem;">Un de vos documents arrive à expiration</h1>
+    <p>Bonjour {{ registrant.firstName }} {{ registrant.lastName }},</p>
+    <p>
+        Votre <strong>{{ documentLabel }}</strong> (dossier réf. {{ registrant.reference }}) expire le
+        <strong>{{ expiresAt|date('d/m/Y') }}</strong>, soit dans <strong>{{ days }} jours</strong>.
+    </p>
+    <p>
+        Merci d'entreprendre les démarches de renouvellement dès que possible auprès des autorités compétentes,
+        et de transmettre une copie du document renouvelé au Bureau Exécutif de l'AGB.
+    </p>
+{% endblock %}

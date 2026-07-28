@@ -1,0 +1,21 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Paramètres · Admin{% endblock %}
+
+{% block breadcrumb %}<span>/ Paramètres</span>{% endblock %}
+
+{% block admin_content %}
+    <h1 class="gab-admin-title">Paramètres</h1>
+
+    <md-outlined-card class="gab-section">
+        <h2 class="gab-section__title">Votre compte</h2>
+        <dl class="gab-definition-list">
+            <div><dt>E-mail</dt><dd>{{ app.user.userIdentifier }}</dd></div>
+            <div><dt>Rôles</dt><dd>{{ app.user.roles|join(', ') }}</dd></div>
+        </dl>
+    </md-outlined-card>
+
+    <md-outlined-card class="gab-section">
+        <p class="gab-admin-subtitle">D'autres paramètres (gestion des comptes administrateurs, préférences de notification…) seront ajoutés ici prochainement.</p>
+    </md-outlined-card>
+{% endblock %}

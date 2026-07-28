@@ -1,0 +1,209 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ registrant.lastName }} {{ registrant.firstName }} · Admin{% endblock %}
+
+{% block breadcrumb %}
+    <a href="{{ path('admin_registrant_index') }}">/ Inscrits</a>
+    <span>/ {{ registrant.lastName }} {{ registrant.firstName }}</span>
+{% endblock %}
+
+{% block admin_content %}
+    {% set student = registrant.studentProfile %}
+    {% set employee = registrant.employeeProfile %}
+    {% set entrepreneur = registrant.entrepreneurProfile %}
+    {% set doc = registrant.identityDocument %}
+
+    <div
+        class="gab-admin-page-header"
+        data-controller="admin-registrant"
+        data-admin-registrant-delete-url-value="{{ path('admin_registrant_delete', {id: registrant.id}) }}"
+        data-admin-registrant-csrf-token-value="{{ csrf_token('delete-registrant-' ~ registrant.id) }}"
+        data-admin-registrant-redirect-url-value="{{ path('admin_registrant_index') }}"
+    >
+        <div>
+            <h1 class="gab-admin-title">{{ registrant.lastName }} {{ registrant.firstName }}</h1>
+            <p class="gab-admin-subtitle">
+                Réf. {{ registrant.reference }} ·
+                <span class="gab-chip gab-chip--{{ registrant.profileType.value }}">
+                    {{ registrant.profileType.value == 'student' ? 'Étudiant' : (registrant.profileType.value == 'employee' ? 'Salarié' : 'Entrepreneur') }}
+                </span>
+                · Inscrit le {{ registrant.createdAt|date('d/m/Y') }}
+            </p>
+        </div>
+
+        <div class="gab-admin-page-header__actions">
+            <a href="{{ path('admin_registrant_documents', {id: registrant.id}) }}" class="gab-outlined-link">
+                <md-icon>download</md-icon> Télécharger tous les documents
+            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <md-filled-button data-action="click->admin-registrant#openDeleteDialog" style="--md-filled-button-container-color: #b91c1c;">
+                    Supprimer
+                    <md-icon slot="icon">delete</md-icon>
+                </md-filled-button>
+
+                <md-dialog data-admin-registrant-target="dialog">
+                    <div slot="headline">Supprimer ce dossier ?</div>
+                    <form slot="content" method="dialog" id="delete-dialog-form">
+                        Cette action supprimera définitivement le dossier de <strong>{{ registrant.lastName }} {{ registrant.firstName }}</strong>
+                        (réf. {{ registrant.reference }}) ainsi que toutes ses pièces jointes. Cette opération est irréversible.
+                    </form>
+                    <div slot="actions">
+                        <md-text-button data-action="click->admin-registrant#closeDeleteDialog">Annuler</md-text-button>
+                        <md-filled-button data-action="click->admin-registrant#confirmDelete" style="--md-filled-button-container-color: #b91c1c;">
+                            Confirmer la suppression
+                        </md-filled-button>
+                    </div>
+                </md-dialog>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="gab-grid gab-grid--2">
+        <md-outlined-card class="gab-section">
+            <h2 class="gab-section__title">Identité civile</h2>
+            <dl class="gab-definition-list">
+                <div><dt>Nom</dt><dd>{{ registrant.lastName }}</dd></div>
+                <div><dt>Prénoms</dt><dd>{{ registrant.firstName }}</dd></div>
+                <div><dt>E-mail</dt><dd>{{ registrant.email }}</dd></div>
+                <div><dt>Date de naissance</dt><dd>{{ registrant.birthDate|date('d/m/Y') }}</dd></div>
+                <div><dt>Lieu de naissance</dt><dd>{{ registrant.birthPlace }}</dd></div>
+                <div><dt>Pays de naissance</dt><dd>{{ registrant.birthCountry|country_name }}</dd></div>
+                <div><dt>Pays de résidence</dt><dd>{{ registrant.country|country_name }}</dd></div>
+                <div><dt>Profession</dt><dd>{{ registrant.profession }}</dd></div>
+            </dl>
+        </md-outlined-card>
+
+        <md-outlined-card class="gab-section">
+            <h2 class="gab-section__title">Téléphones & séjour</h2>
+            <dl class="gab-definition-list">
+                <div><dt>Téléphone local</dt><dd>{{ registrant.localPhone }}</dd></div>
+                <div><dt>Contact au Gabon</dt><dd>{{ registrant.gabonContact }}</dd></div>
+                <div><dt>1ère entrée</dt><dd>{{ registrant.firstEntryDate|date('d/m/Y') }}</dd></div>
+                <div><dt>Durée de séjour</dt><dd>{{ registrant.firstEntryDate|stay_duration }}</dd></div>
+            </dl>
+        </md-outlined-card>
+    </div>
+
+    <div class="gab-grid gab-grid--2">
+        <md-outlined-card class="gab-section">
+            <div class="gab-section__header">
+                <h2 class="gab-section__title">Passeport</h2>
+                <span class="gab-badge gab-badge--{{ documentStatuses.passport.status }}">{{ documentStatuses.passport.label }}</span>
+            </div>
+            <dl class="gab-definition-list">
+                <div><dt>Numéro</dt><dd>{{ doc.passportNumber }}</dd></div>
+                <div><dt>Délivré le</dt><dd>{{ doc.passportIssuedAt|date('d/m/Y') }}</dd></div>
+                <div><dt>Expire le</dt><dd>{{ doc.passportExpiresAt|date('d/m/Y') }}</dd></div>
+            </dl>
+            {% if doc.passportFile %}
+                <a class="gab-outlined-link" href="{{ path('admin_file_download', {id: registrant.id, field: 'passportFile'}) }}">
+                    <md-icon>description</md-icon> Télécharger le passeport
+                </a>
+            {% endif %}
+        </md-outlined-card>
+
+        <md-outlined-card class="gab-section">
+            <div class="gab-section__header">
+                <h2 class="gab-section__title">Carte de résident</h2>
+                <span class="gab-badge gab-badge--{{ documentStatuses.residentCard.status }}">{{ documentStatuses.residentCard.label }}</span>
+            </div>
+            {% if doc.residentCardNumber %}
+                <dl class="gab-definition-list">
+                    <div><dt>Numéro</dt><dd>{{ doc.residentCardNumber }}</dd></div>
+                    <div><dt>Délivrée le</dt><dd>{{ doc.residentCardIssuedAt|date('d/m/Y') }}</dd></div>
+                    <div><dt>Expire le</dt><dd>{{ doc.residentCardExpiresAt|date('d/m/Y') }}</dd></div>
+                </dl>
+                {% if doc.residentCardFile %}
+                    <a class="gab-outlined-link" href="{{ path('admin_file_download', {id: registrant.id, field: 'residentCardFile'}) }}">
+                        <md-icon>description</md-icon> Télécharger la carte de résident
+                    </a>
+                {% endif %}
+            {% else %}
+                <p class="gab-admin-subtitle">Non concerné(e).</p>
+            {% endif %}
+        </md-outlined-card>
+    </div>
+
+    <md-outlined-card class="gab-section">
+        <div class="gab-section__header">
+            <h2 class="gab-section__title">Carte consulaire</h2>
+            <span class="gab-badge gab-badge--{{ documentStatuses.consularCard.status }}">{{ documentStatuses.consularCard.label }}</span>
+        </div>
+        <dl class="gab-definition-list gab-definition-list--inline">
+            <div><dt>Numéro</dt><dd>{{ doc.consularCardNumber }}</dd></div>
+            <div><dt>Délivrée le</dt><dd>{{ doc.consularCardIssuedAt|date('d/m/Y') }}</dd></div>
+            <div><dt>Expire le</dt><dd>{{ doc.consularCardExpiresAt|date('d/m/Y') }}</dd></div>
+        </dl>
+        {% if doc.consularCardFile %}
+            <a class="gab-outlined-link" href="{{ path('admin_file_download', {id: registrant.id, field: 'consularCardFile'}) }}">
+                <md-icon>description</md-icon> Télécharger la carte consulaire
+            </a>
+        {% endif %}
+    </md-outlined-card>
+
+    {% if student %}
+        <md-outlined-card class="gab-section">
+            <h2 class="gab-section__title">Profil étudiant</h2>
+            <dl class="gab-definition-list">
+                <div><dt>Établissement</dt><dd>{{ student.institution }}</dd></div>
+                <div><dt>Souhaite rentrer au Gabon</dt><dd>{{ student.wishReturnGabon ? 'Oui' : 'Non' }}</dd></div>
+                <div><dt>Administration visée</dt><dd>{{ student.targetAdministration|default('—') }}</dd></div>
+                <div><dt>Autres administrations</dt><dd>{{ student.otherAdministrations ? student.otherAdministrations|join(', ') : '—' }}</dd></div>
+                <div><dt>Situation</dt><dd>
+                    {{ student.inTraining ? 'En formation · ' : '' }}{{ student.endOfCycle ? 'Fin de cycle · ' : '' }}{{ student.awaitingDefense ? 'En attente de soutenance · ' : '' }}{{ student.graduatedJobSeeking ? 'Diplômé, en recherche d\'emploi' : '' }}
+                </dd></div>
+            </dl>
+            {% if student.diplomaFile %}
+                <a class="gab-outlined-link" href="{{ path('admin_file_download', {id: registrant.id, field: 'diplomaFile'}) }}">
+                    <md-icon>description</md-icon> Télécharger le diplôme
+                </a>
+            {% endif %}
+        </md-outlined-card>
+    {% elseif employee %}
+        <md-outlined-card class="gab-section">
+            <h2 class="gab-section__title">Profil salarié</h2>
+            <dl class="gab-definition-list">
+                <div><dt>Dernier diplôme</dt><dd>{{ employee.lastDegree }}</dd></div>
+                <div><dt>Année du premier emploi</dt><dd>{{ employee.firstJobYear }}</dd></div>
+                <div><dt>Secteur d'activité</dt><dd>{{ employee.activitySector }}</dd></div>
+                <div><dt>Poste actuel</dt><dd>{{ employee.jobTitle }} — {{ employee.currentCompany }}</dd></div>
+                <div><dt>Souhaite intégrer le Gabon</dt><dd>{{ employee.wishIntegrateGabon ? 'Oui' : 'Non' }}</dd></div>
+                <div><dt>Entreprise visée</dt><dd>{{ employee.targetCompany|default('—') }}</dd></div>
+                <div><dt>Autres entreprises</dt><dd>{{ employee.otherCompanies ? employee.otherCompanies|join(', ') : '—' }}</dd></div>
+            </dl>
+            {% if employee.cvFile %}
+                <a class="gab-outlined-link" href="{{ path('admin_file_download', {id: registrant.id, field: 'cvFile'}) }}">
+                    <md-icon>description</md-icon> Télécharger le CV
+                </a>
+            {% endif %}
+        </md-outlined-card>
+    {% elseif entrepreneur %}
+        <md-outlined-card class="gab-section">
+            <h2 class="gab-section__title">Profil entrepreneur</h2>
+            <dl class="gab-definition-list">
+                <div><dt>Entreprise</dt><dd>{{ entrepreneur.companyName }}</dd></div>
+                <div><dt>Créée le</dt><dd>{{ entrepreneur.createdAt|date('d/m/Y') }}</dd></div>
+                <div><dt>Statut juridique</dt><dd>{{ entrepreneur.legalStatus }}</dd></div>
+                <div><dt>Secteur d'activité</dt><dd>{{ entrepreneur.activitySector }}</dd></div>
+                <div><dt>RCCM / NINEA / IFU</dt><dd>{{ entrepreneur.registrationNumber }}</dd></div>
+                <div><dt>Projet au Gabon</dt><dd>{{ entrepreneur.hasGabonProject ? 'Oui' : 'Non' }}</dd></div>
+                <div><dt>Secteur d'investissement</dt><dd>{{ entrepreneur.investmentSector|default('—') }}</dd></div>
+                <div><dt>Business plan</dt><dd>{{ entrepreneur.hasBusinessPlan ? 'Oui' : 'Non' }}</dd></div>
+                <div><dt>Autres cibles</dt><dd>{{ entrepreneur.otherTargets ? entrepreneur.otherTargets|join(', ') : '—' }}</dd></div>
+            </dl>
+            {% if entrepreneur.businessPlanFile %}
+                <a class="gab-outlined-link" href="{{ path('admin_file_download', {id: registrant.id, field: 'businessPlanFile'}) }}">
+                    <md-icon>description</md-icon> Télécharger le business plan
+                </a>
+            {% endif %}
+        </md-outlined-card>
+    {% endif %}
+
+    <md-outlined-card class="gab-section">
+        <h2 class="gab-section__title">Consentement & statut</h2>
+        <dl class="gab-definition-list gab-definition-list--inline">
+            <div><dt>Consentement RGPD</dt><dd>{{ registrant.consentGiven ? 'Donné' : 'Non donné' }}</dd></div>
+            <div><dt>Statut du dossier</dt><dd>{{ registrant.status.value == 'submitted' ? 'Soumis' : 'Brouillon' }}</dd></div>
+        </dl>
+    </md-outlined-card>
+{% endblock %}

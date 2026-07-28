@@ -10,10 +10,10 @@
     {% for type, messages in app.flashes %}
         {% set gab_variant = type in ['success', 'error', 'danger', 'warning', 'info'] ? (type == 'danger' ? 'error' : type) : 'info' %}
         {% for message in messages %}
-            <div class="gab-banner gab-banner--{{ gab_variant }}" role="{{ gab_variant == 'error' ? 'alert' : 'status' }}">
+            <div class="gab-banner gab-banner--{{ gab_variant }}" role="{{ gab_variant == 'error' ? 'alert' : 'status' }}" data-controller="flash">
                 <md-icon>{{ gab_flash_icons[type]|default('info') }}</md-icon>
                 <span class="gab-banner__message">{{ message }}</span>
-                <md-icon-button type="button" aria-label="Fermer" onclick="this.closest('.gab-banner').remove()">
+                <md-icon-button type="button" aria-label="Fermer" data-action="click->flash#close">
                     <md-icon>close</md-icon>
                 </md-icon-button>
             </div>

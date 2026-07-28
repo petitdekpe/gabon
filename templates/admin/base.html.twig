@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/registration.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/admin.css') }}">
+{% endblock %}
+
+{% block navbar %}
+    {% if app.user %}
+        <span class="gab-admin-whoami">{{ app.user.userIdentifier }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% set current_route = app.request.attributes.get('_route') %}
+    <div class="gab-admin-shell">
+        <aside class="gab-admin-rail">
+            <md-list class="gab-admin-rail__nav">
+                <md-list-item type="link" href="{{ path('admin_dashboard') }}" class="gab-admin-rail__item {{ current_route == 'admin_dashboard' ? 'is-active' : '' }}">
+                    <md-icon slot="start">dashboard</md-icon>
+                    <div slot="headline">Tableau de bord</div>
+                </md-list-item>
+                <md-list-item type="link" href="{{ path('admin_registrant_index') }}" class="gab-admin-rail__item {{ current_route == 'admin_registrant_index' ? 'is-active' : '' }}">
+                    <md-icon slot="start">groups</md-icon>
+                    <div slot="headline">Inscrits</div>
+                </md-list-item>
+                <md-list-item type="link" href="{{ path('admin_registrant_index') }}?passportStatus=expired" class="gab-admin-rail__item">
+                    <md-icon slot="start">event_busy</md-icon>
+                    <div slot="headline">Documents expirés</div>
+                </md-list-item>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <md-list-item type="link" href="{{ path('admin_export') }}" class="gab-admin-rail__item {{ current_route == 'admin_export' ? 'is-active' : '' }}">
+                        <md-icon slot="start">download</md-icon>
+                        <div slot="headline">Export</div>
+                    </md-list-item>
+                {% endif %}
+                <md-list-item type="link" href="{{ path('admin_settings') }}" class="gab-admin-rail__item {{ current_route == 'admin_settings' ? 'is-active' : '' }}">
+                    <md-icon slot="start">settings</md-icon>
+                    <div slot="headline">Paramètres</div>
+                </md-list-item>
+            </md-list>
+
+            <a class="gab-admin-rail__logout" href="{{ path('admin_logout') }}">
+                <md-icon>logout</md-icon>
+                <span>Déconnexion</span>
+            </a>
+        </aside>
+
+        <div class="gab-admin-main">
+            <nav class="gab-breadcrumb" aria-label="Fil d'Ariane">
+                <a href="{{ path('admin_dashboard') }}">Admin</a>
+                {% block breadcrumb %}{% endblock %}
+            </nav>
+
+            <div class="gab-admin-page">
+                {% block admin_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

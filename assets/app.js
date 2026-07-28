@@ -18,3 +18,7 @@ import '@material/web/fab/fab.js';
 import '@material/web/progress/linear-progress.js';
 import '@material/web/iconbutton/icon-button.js';
 import '@material/web/icon/icon.js';
+import '@material/web/dialog/dialog.js';
+import '@material/web/list/list.js';
+import '@material/web/list/list-item.js';
+import '@material/web/divider/divider.js';

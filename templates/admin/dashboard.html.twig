@@ -1,0 +1,92 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Tableau de bord · Admin{% endblock %}
+
+{% block breadcrumb %}<span>/ Tableau de bord</span>{% endblock %}
+
+{% block admin_content %}
+    <h1 class="gab-admin-title">Tableau de bord</h1>
+
+    <div class="gab-kpi-grid">
+        <md-outlined-card class="gab-kpi">
+            <p class="gab-kpi__label">Total inscrits</p>
+            <p class="gab-kpi__value">{{ totalSubmitted }}</p>
+            <p class="gab-kpi__hint">dossiers soumis</p>
+        </md-outlined-card>
+
+        <md-outlined-card class="gab-kpi">
+            <p class="gab-kpi__label">Répartition par profil</p>
+            <div class="gab-bar-chart">
+                <div class="gab-bar-chart__row">
+                    <span class="gab-bar-chart__label">Étudiant</span>
+                    <div class="gab-bar-chart__track">
+                        <div class="gab-bar-chart__bar gab-bar-chart__bar--student" style="width: {{ (profileCounts.student / profileCountsMax * 100)|round }}%"></div>
+                    </div>
+                    <span class="gab-bar-chart__count">{{ profileCounts.student }}</span>
+                </div>
+                <div class="gab-bar-chart__row">
+                    <span class="gab-bar-chart__label">Salarié</span>
+                    <div class="gab-bar-chart__track">
+                        <div class="gab-bar-chart__bar gab-bar-chart__bar--employee" style="width: {{ (profileCounts.employee / profileCountsMax * 100)|round }}%"></div>
+                    </div>
+                    <span class="gab-bar-chart__count">{{ profileCounts.employee }}</span>
+                </div>
+                <div class="gab-bar-chart__row">
+                    <span class="gab-bar-chart__label">Entrepreneur</span>
+                    <div class="gab-bar-chart__track">
+                        <div class="gab-bar-chart__bar gab-bar-chart__bar--entrepreneur" style="width: {{ (profileCounts.entrepreneur / profileCountsMax * 100)|round }}%"></div>
+                    </div>
+                    <span class="gab-bar-chart__count">{{ profileCounts.entrepreneur }}</span>
+                </div>
+            </div>
+        </md-outlined-card>
+
+        <md-outlined-card class="gab-kpi">
+            <p class="gab-kpi__label">Documents expirant sous 30 jours</p>
+            <p class="gab-kpi__value gab-kpi__value--warning">{{ expiringSoon }}</p>
+            <p class="gab-kpi__hint">passeport, résident ou consulaire</p>
+        </md-outlined-card>
+
+        <md-outlined-card class="gab-kpi">
+            <p class="gab-kpi__label">Inscriptions ce mois-ci</p>
+            <p class="gab-kpi__value">{{ submittedThisMonth }}</p>
+            <p class="gab-kpi__hint">{{ currentMonthLabel }}</p>
+        </md-outlined-card>
+    </div>
+
+    <md-outlined-card class="gab-section">
+        <h2 class="gab-section__title">10 derniers inscrits</h2>
+        <div class="gab-table-wrapper">
+            <table class="gab-table">
+                <thead>
+                    <tr>
+                        <th>Réf.</th>
+                        <th>Nom complet</th>
+                        <th>Profil</th>
+                        <th>Pays</th>
+                        <th>Inscrit le</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registrant in recentRegistrants %}
+                        <tr>
+                            <td>{{ registrant.reference }}</td>
+                            <td>{{ registrant.lastName }} {{ registrant.firstName }}</td>
+                            <td><span class="gab-chip gab-chip--{{ registrant.profileType.value }}">{{ registrant.profileType.value == 'student' ? 'Étudiant' : (registrant.profileType.value == 'employee' ? 'Salarié' : 'Entrepreneur') }}</span></td>
+                            <td>{{ registrant.country }}</td>
+                            <td>{{ registrant.createdAt|date('d/m/Y') }}</td>
+                            <td class="gab-table__actions">
+                                <a href="{{ path('admin_registrant_show', {id: registrant.id}) }}" class="gab-icon-link" title="Voir la fiche">
+                                    <md-icon>visibility</md-icon>
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="6">Aucun inscrit pour le moment.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </md-outlined-card>
+{% endblock %}

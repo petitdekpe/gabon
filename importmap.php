@@ -142,4 +142,16 @@ return [
     'lit-html/directives/style-map.js' => [
         'version' => '3.3.2',
     ],
+    '@material/web/dialog/dialog.js' => [
+        'version' => '2.5.0',
+    ],
+    '@material/web/list/list.js' => [
+        'version' => '2.5.0',
+    ],
+    '@material/web/list/list-item.js' => [
+        'version' => '2.5.0',
+    ],
+    '@material/web/divider/divider.js' => [
+        'version' => '2.5.0',
+    ],
 ];

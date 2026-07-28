@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion administrateur · Diaspora Gabonaise{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="gab-login">
+        <md-outlined-card class="gab-login__card">
+            <div class="gab-login__brand">
+                <span class="gab-login__flag" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                </span>
+                <div>
+                    <p class="gab-login__title">Diaspora Gabonaise</p>
+                    <p class="gab-login__subtitle">Back-office administrateur</p>
+                </div>
+            </div>
+
+            {% if error %}
+                <p class="gab-banner gab-banner--error" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+            {% endif %}
+
+            <form method="post" class="gab-login__form">
+                <md-outlined-text-field
+                    class="gab-field"
+                    label="Adresse e-mail"
+                    type="email"
+                    name="email"
+                    value="{{ last_email }}"
+                    required
+                    autofocus
+                ></md-outlined-text-field>
+                <md-outlined-text-field
+                    class="gab-field"
+                    label="Mot de passe"
+                    type="password"
+                    name="password"
+                    required
+                ></md-outlined-text-field>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <md-filled-button type="submit" class="gab-login__submit">
+                    Se connecter
+                    <md-icon slot="icon">login</md-icon>
+                </md-filled-button>
+            </form>
+        </md-outlined-card>
+    </div>
+{% endblock %}

@@ -33,6 +33,11 @@ class Registrant
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Assert\Email]
+    private ?string $email = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
@@ -138,6 +143,18 @@ class Registrant
     public function setCountry(string $country): static
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }

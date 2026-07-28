@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Config\DeploymentConfig;
 use App\Entity\EmployeeProfile;
 use App\Entity\EntrepreneurProfile;
 use App\Entity\Enum\ProfileType;
@@ -14,6 +15,7 @@ use App\Form\Step1IdentityType;
 use App\Form\Step2EmployeeType;
 use App\Form\Step2EntrepreneurType;
 use App\Form\Step2StudentType;
+use App\Service\DocumentStatusService;
 use App\Service\DocumentUploadHandler;
 use App\Service\UploadException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,6 +25,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -35,6 +39,9 @@ class RegistrationController extends AbstractController
         private readonly EntityManagerInterface $entityManager,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly ValidatorInterface $validator,
+        private readonly DocumentStatusService $documentStatusService,
+        private readonly DeploymentConfig $deploymentConfig,
+        private readonly RateLimiterFactory $registrationStep2Limiter,
     ) {
     }
 
@@ -43,6 +50,9 @@ class RegistrationController extends AbstractController
     {
         $identityDocument = new IdentityDocument();
         $registrant = new Registrant($identityDocument);
+        // Pré-sélectionne le pays du déploiement pilote sans verrouiller le champ :
+        // l'utilisateur peut toujours choisir un autre pays de la Zone Afrique.
+        $registrant->setCountry($this->deploymentConfig->getCountry());
 
         $form = $this->createForm(Step1IdentityType::class, $registrant);
         $form->handleRequest($request);
@@ -57,7 +67,7 @@ class RegistrationController extends AbstractController
 
                 return $this->render('registration/step1.html.twig', [
                     'form' => $form,
-                    'documentStatuses' => $this->computeDocumentStatuses($identityDocument),
+                    'documentStatuses' => $this->documentStatusService->getStatusForRegistrant($registrant),
                 ]);
             }
 
@@ -70,7 +80,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/step1.html.twig', [
             'form' => $form,
-            'documentStatuses' => $this->computeDocumentStatuses($identityDocument),
+            'documentStatuses' => $this->documentStatusService->getStatusForRegistrant($registrant),
         ]);
     }
 
@@ -99,6 +109,14 @@ class RegistrationController extends AbstractController
     #[Route('/register/step2', name: 'register_step2', methods: ['GET', 'POST'])]
     public function step2(Request $request): Response
     {
+        if ($request->isMethod('POST')) {
+            $limiter = $this->registrationStep2Limiter->create($request->getClientIp());
+
+            if (!$limiter->consume(1)->isAccepted()) {
+                throw new TooManyRequestsHttpException(null, 'Trop de tentatives de soumission depuis cette adresse. Merci de réessayer plus tard.');
+            }
+        }
+
         $registrant = $this->getSessionRegistrant($request);
 
         if ($registrant === null) {
@@ -267,39 +285,5 @@ class RegistrationController extends AbstractController
 
         $path = $this->uploadHandler->handle($file, $registrant->getId());
         $target->$setter($path);
-    }
-
-    /**
-     * @return array<string, array{level: string, label: string}>
-     */
-    private function computeDocumentStatuses(IdentityDocument $identityDocument): array
-    {
-        return [
-            'passport' => $this->computeStatus($identityDocument->getPassportExpiresAt()),
-            'residentCard' => $this->computeStatus($identityDocument->getResidentCardExpiresAt()),
-            'consularCard' => $this->computeStatus($identityDocument->getConsularCardExpiresAt()),
-        ];
-    }
-
-    /**
-     * @return array{level: string, label: string}
-     */
-    private function computeStatus(?\DateTimeImmutable $expiresAt): array
-    {
-        if ($expiresAt === null) {
-            return ['level' => 'unknown', 'label' => 'À renseigner'];
-        }
-
-        $daysLeft = (int) (new \DateTimeImmutable('today'))->diff($expiresAt)->format('%r%a');
-
-        if ($daysLeft < 0) {
-            return ['level' => 'expired', 'label' => 'Expirée'];
-        }
-
-        if ($daysLeft <= 90) {
-            return ['level' => 'warning', 'label' => \sprintf("En cours d'expiration (J-%d)", $daysLeft)];
-        }
-
-        return ['level' => 'valid', 'label' => 'En cours de validité'];
     }
 }

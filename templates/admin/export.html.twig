@@ -1,0 +1,35 @@
+{% extends 'admin/base.html.twig' %}
+{% import 'registration/_form_macros.html.twig' as f %}
+
+{% block title %}Export · Admin{% endblock %}
+
+{% block breadcrumb %}<span>/ Export</span>{% endblock %}
+
+{% block admin_content %}
+    <h1 class="gab-admin-title">Export des inscrits</h1>
+    <p class="gab-admin-subtitle">Les mêmes filtres que la liste des inscrits s'appliquent à l'export.</p>
+
+    <md-outlined-card class="gab-section gab-filter-card">
+        {{ form_start(filterForm, {method: 'GET', attr: {novalidate: 'novalidate'}}) }}
+            <div class="gab-grid gab-grid--filters">
+                {{ f.text_field(filterForm.search) }}
+                {{ f.select_field(filterForm.country) }}
+                {{ f.select_field(filterForm.profileType) }}
+                {{ f.select_field(filterForm.passportStatus) }}
+                {{ f.select_field(filterForm.consularStatus) }}
+                {{ f.text_field(filterForm.dateFrom, 'date') }}
+                {{ f.text_field(filterForm.dateTo, 'date') }}
+            </div>
+
+            {{ f.radio_group_field(filterForm.format) }}
+
+            <div class="gab-filter-card__actions">
+                <md-filled-button type="submit" style="--md-filled-button-container-color: #009e60;">
+                    Générer l'export
+                    <md-icon slot="icon">download</md-icon>
+                </md-filled-button>
+            </div>
+            {{ form_rest(filterForm) }}
+        {{ form_end(filterForm, {render_rest: false}) }}
+    </md-outlined-card>
+{% endblock %}
