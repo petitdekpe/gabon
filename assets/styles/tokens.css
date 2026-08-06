@@ -73,6 +73,10 @@
   --gab-space-5: 32px;
   --gab-max-width: 1080px;
   --gab-font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --gab-font-display: 'Fraunces', 'Georgia', serif;
+
+  /* --- Vert profond (sous-bois), utilisé pour les voiles sur photo --- */
+  --gab-ink-deep: #04211a;
 }
 
 * {
@@ -83,6 +87,7 @@ html,
 body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
   font-family: var(--gab-font-family);
   background-color: var(--md-sys-color-background);
   color: var(--md-sys-color-on-background);

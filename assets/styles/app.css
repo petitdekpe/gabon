@@ -1,35 +1,191 @@
-/* Page d'accueil */
-.gab-hero {
-  display: grid;
-  justify-items: center;
-  text-align: center;
-  gap: var(--gab-space-3);
-  max-width: 560px;
-  margin: var(--gab-space-5) auto;
-  padding: var(--gab-space-4);
+/* Full-bleed : fait sortir un élément du conteneur centré .gab-main */
+.gab-full-bleed {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 }
 
-.gab-hero h1 {
+/* Page d'accueil — héros photographique */
+.gab-hero {
+  --gab-hero-image-fallback: linear-gradient(160deg, var(--gab-ink-deep), var(--color-primary));
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: calc(var(--gab-space-4) * -1);
+  display: flex;
+  align-items: flex-end;
+  min-height: min(78vh, 640px);
+  background-color: var(--gab-ink-deep);
+  background-image: var(--gab-hero-image-fallback);
+  background-size: cover;
+  background-position: center;
+}
+
+.gab-hero__inner {
+  width: 100%;
+  max-width: var(--gab-max-width);
+  margin-inline: auto;
+  padding: var(--gab-space-5) var(--gab-space-4) var(--gab-space-5);
+  display: grid;
+  gap: var(--gab-space-2);
+  color: #fff;
+}
+
+.gab-hero__eyebrow {
   margin: 0;
-  font-size: 1.75rem;
-  color: var(--md-sys-color-on-surface);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+}
+
+.gab-hero__title {
+  margin: 0 0 var(--gab-space-1);
+  font-family: var(--gab-font-display);
+  font-weight: 600;
+  font-size: clamp(2.1rem, 5vw + 1rem, 3.5rem);
+  line-height: 1.05;
+  max-width: 14ch;
+}
+
+.gab-hero__title em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-secondary);
 }
 
 .gab-hero__lead {
+  margin: 0 0 var(--gab-space-2);
+  max-width: 46ch;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.gab-hero__inner md-filled-button {
+  justify-self: start;
+}
+
+/* Bandeau décoratif — motif Bwiti découpé, cycle les couleurs du drapeau */
+.gab-divider {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: calc(var(--gab-space-4) * -1);
+  margin-bottom: calc(var(--gab-space-4) * -1);
+  height: 56px;
+  -webkit-mask-image: url('/img/pattern.png');
+  mask-image: url('/img/pattern.png');
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-size: 130px;
+  mask-size: 130px;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.gab-divider--primary { background-color: var(--color-primary); }
+.gab-divider--secondary { background-color: var(--color-secondary); }
+.gab-divider--tertiary { background-color: var(--color-tertiary); }
+
+/* Vitrine — trois visages du Gabon */
+.gab-showcase {
+  display: grid;
+  text-align: center;
+  gap: var(--gab-space-2);
+  padding: var(--gab-space-4) 0;
+}
+
+.gab-showcase__eyebrow {
   margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.gab-showcase__title {
+  margin: 0;
+  font-family: var(--gab-font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 2vw + 1rem, 2.1rem);
+  color: var(--md-sys-color-on-surface);
+}
+
+.gab-showcase__lead {
+  margin: 0 auto var(--gab-space-2);
+  max-width: 46ch;
   color: var(--md-sys-color-on-surface-variant);
+}
+
+.gab-showcase__grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gab-space-3);
+}
+
+.gab-card {
+  margin: 0;
+  position: relative;
+  border-radius: var(--gab-radius-md);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 14%);
+}
+
+.gab-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gab-card figcaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: grid;
+  gap: 2px;
+  padding: var(--gab-space-3) var(--gab-space-2) var(--gab-space-2);
+  text-align: left;
+  color: #fff;
+  background-image: linear-gradient(180deg, transparent, rgba(4, 33, 26, 0.85));
+}
+
+.gab-card__title {
+  font-family: var(--gab-font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.gab-card__text {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Installation PWA (bas de page d'accueil) */
 .gab-install {
   display: grid;
-  justify-items: center;
   text-align: center;
   gap: var(--gab-space-2);
   max-width: 480px;
-  margin: 0 auto var(--gab-space-5);
+  margin: 0 auto;
   padding: var(--gab-space-4);
-  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.gab-install md-outlined-button {
+  justify-self: center;
 }
 
 .gab-install__title {
@@ -122,6 +278,7 @@
 .gab-page {
   min-height: 100vh;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr auto;
   padding-top: calc(var(--gab-topbar-stripe-height) + var(--gab-header-height));
 }
@@ -132,6 +289,7 @@
   margin-inline: auto;
   padding: var(--gab-space-4) var(--gab-space-3);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--gab-space-4);
 }
 
@@ -202,4 +360,12 @@
   .gab-topbar { padding: 0 var(--gab-space-3); }
   .gab-topbar__brand { font-size: 0.95rem; }
   .gab-main { padding: var(--gab-space-3) var(--gab-space-2); }
+
+  .gab-hero { min-height: min(88vh, 560px); }
+  .gab-hero__inner { padding: var(--gab-space-4) var(--gab-space-3); }
+
+  .gab-showcase__grid { grid-template-columns: 1fr; max-width: 360px; }
+  .gab-card { aspect-ratio: 16 / 10; }
+
+  .gab-divider { height: 40px; -webkit-mask-size: 90px; mask-size: 90px; }
 }

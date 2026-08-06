@@ -3,19 +3,59 @@
 {% block title %}Recensement de la diaspora gabonaise{% endblock %}
 
 {% block content %}
-    <div class="gab-hero">
-        <h1>Recensement de la diaspora gabonaise</h1>
-        <p class="gab-hero__lead">
-            Faites-vous connaître auprès du Bureau Exécutif de l'AGB en quelques minutes,
-            où que vous soyez en Zone Afrique.
-        </p>
-        <md-filled-button href="{{ path('register_step1') }}" style="--md-filled-button-container-color: #009e60;">
-            Commencer mon inscription
-            <md-icon slot="icon">arrow_forward</md-icon>
-        </md-filled-button>
-    </div>
+    <section class="gab-hero" style="background-image: linear-gradient(180deg, rgba(4,33,26,.25) 0%, rgba(4,33,26,.55) 55%, rgba(4,33,26,.92) 100%), url('/img/parc-national-lope-aerien.jpg');">
+        <div class="gab-hero__inner">
+            <p class="gab-hero__eyebrow">Bureau Exécutif de l'AGB · Zone Afrique</p>
+            <h1 class="gab-hero__title">Recensement de la <em>diaspora</em> gabonaise</h1>
+            <p class="gab-hero__lead">
+                Faites-vous connaître auprès du Bureau Exécutif de l'AGB en quelques minutes,
+                où que vous soyez en Zone Afrique.
+            </p>
+            <md-filled-button href="{{ path('register_step1') }}" style="--md-filled-button-container-color: #009e60;">
+                Commencer mon inscription
+                <md-icon slot="icon">arrow_forward</md-icon>
+            </md-filled-button>
+        </div>
+    </section>
 
-    <div class="gab-install" data-controller="pwa-install">
+    <div class="gab-divider gab-divider--primary" aria-hidden="true"></div>
+
+    <section class="gab-showcase">
+        <p class="gab-showcase__eyebrow">Le Gabon nous unit</p>
+        <h2 class="gab-showcase__title">Une terre, un peuple, une seule voix</h2>
+        <p class="gab-showcase__lead">
+            Où que vous soyez en zone Afrique, ce recensement vous relie à la communauté
+            gabonaise et à sa terre d'origine.
+        </p>
+
+        <div class="gab-showcase__grid">
+            <figure class="gab-card">
+                <img src="/img/elephants-gabon-1200x800.jpg" alt="Éléphants de forêt dans le Parc national de la Lopé" loading="lazy">
+                <figcaption>
+                    <span class="gab-card__title">Parc de la Lopé</span>
+                    <span class="gab-card__text">Un patrimoine naturel classé à l'UNESCO.</span>
+                </figcaption>
+            </figure>
+            <figure class="gab-card">
+                <img src="/img/riviere-pirogue-gabon.jpg" alt="Pirogue traditionnelle sur une rivière gabonaise" loading="lazy">
+                <figcaption>
+                    <span class="gab-card__title">Rivières &amp; forêts</span>
+                    <span class="gab-card__text">Le deuxième poumon vert de la planète.</span>
+                </figcaption>
+            </figure>
+            <figure class="gab-card">
+                <img src="/img/mandrill-gabon.webp" alt="Mandrill, primate emblématique du Gabon" loading="lazy">
+                <figcaption>
+                    <span class="gab-card__title">Faune emblématique</span>
+                    <span class="gab-card__text">Gorilles, éléphants, mandrills : une biodiversité exceptionnelle.</span>
+                </figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <div class="gab-divider gab-divider--secondary" aria-hidden="true"></div>
+
+    <section class="gab-install" data-controller="pwa-install">
         <h2 class="gab-install__title">Installez l'application sur votre téléphone</h2>
         <p class="gab-install__lead">
             Ajoutez Diaspora Gabonaise à votre écran d'accueil pour y accéder en un geste.
@@ -33,5 +73,7 @@
         <p class="gab-install__hint" hidden data-pwa-install-target="alreadyInstalled">
             ✓ L'application est déjà installée sur cet appareil.
         </p>
-    </div>
+    </section>
+
+    <div class="gab-divider gab-divider--tertiary" aria-hidden="true"></div>
 {% endblock %}
