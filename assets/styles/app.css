@@ -8,9 +8,8 @@
   margin-right: -50vw;
 }
 
-/* Page d'accueil — héros photographique */
+/* Page d'accueil — héros photographique en slider */
 .gab-hero {
-  --gab-hero-image-fallback: linear-gradient(160deg, var(--gab-ink-deep), var(--color-primary));
   width: 100vw;
   position: relative;
   left: 50%;
@@ -20,14 +19,60 @@
   margin-top: calc(var(--gab-space-4) * -1);
   display: flex;
   align-items: flex-end;
+  overflow: hidden;
   min-height: min(78vh, 640px);
   background-color: var(--gab-ink-deep);
-  background-image: var(--gab-hero-image-fallback);
+}
+
+.gab-hero__slide {
+  position: absolute;
+  inset: 0;
   background-size: cover;
   background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.gab-hero__slide.is-active {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gab-hero__slide { transition: none; }
+}
+
+.gab-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(180deg, rgba(4, 33, 26, .25) 0%, rgba(4, 33, 26, .55) 55%, rgba(4, 33, 26, .92) 100%);
+}
+
+.gab-hero__dots {
+  position: absolute;
+  z-index: 2;
+  right: var(--gab-space-4);
+  bottom: var(--gab-space-4);
+  display: flex;
+  gap: var(--gab-space-2);
+}
+
+.gab-hero__dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+}
+
+.gab-hero__dot.is-active {
+  background-color: #fff;
 }
 
 .gab-hero__inner {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: var(--gab-max-width);
   margin-inline: auto;
@@ -174,38 +219,6 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
-/* Installation PWA (bas de page d'accueil) */
-.gab-install {
-  display: grid;
-  text-align: center;
-  gap: var(--gab-space-2);
-  max-width: 480px;
-  margin: 0 auto;
-  padding: var(--gab-space-4);
-}
-
-.gab-install md-outlined-button {
-  justify-self: center;
-}
-
-.gab-install__title {
-  margin: 0;
-  font-size: 1.1rem;
-  color: var(--md-sys-color-on-surface);
-}
-
-.gab-install__lead,
-.gab-install__hint {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.gab-install__inline-icon {
-  font-size: 1.1em;
-  vertical-align: middle;
-}
-
 /* Bandeau tricolore du drapeau gabonais, fixé en haut de la fenêtre */
 .gab-flag-stripe {
   position: fixed;
@@ -291,16 +304,6 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--gab-space-4);
-}
-
-/* Footer */
-.gab-footer {
-  background-color: var(--md-sys-color-surface-container);
-  color: var(--md-sys-color-on-surface-variant);
-  padding: var(--gab-space-4) var(--gab-space-3);
-  text-align: center;
-  font-size: 0.85rem;
-  border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 
 /* Zone flash messages */

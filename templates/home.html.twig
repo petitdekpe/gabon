@@ -3,7 +3,11 @@
 {% block title %}Recensement de la diaspora gabonaise{% endblock %}
 
 {% block content %}
-    <section class="gab-hero" style="background-image: linear-gradient(180deg, rgba(4,33,26,.25) 0%, rgba(4,33,26,.55) 55%, rgba(4,33,26,.92) 100%), url('/img/parc-national-lope-aerien.jpg');">
+    <section class="gab-hero" data-controller="hero-slider" data-hero-slider-interval-value="6000">
+        <div class="gab-hero__slide is-active" data-hero-slider-target="slide" style="background-image: url('/img/parc-national-lope-aerien.jpg');" aria-hidden="true"></div>
+        <div class="gab-hero__slide" data-hero-slider-target="slide" style="background-image: url('/img/countries-gabon.jpg');" aria-hidden="true"></div>
+        <div class="gab-hero__slide" data-hero-slider-target="slide" style="background-image: url('/img/gabon-image1.jpg');" aria-hidden="true"></div>
+        <div class="gab-hero__scrim" aria-hidden="true"></div>
         <div class="gab-hero__inner">
             <p class="gab-hero__eyebrow">Bureau Exécutif de l'AGB · Zone Afrique</p>
             <h1 class="gab-hero__title">Recensement de la <em>diaspora</em> gabonaise</h1>
@@ -15,6 +19,11 @@
                 Commencer mon inscription
                 <md-icon slot="icon">arrow_forward</md-icon>
             </md-filled-button>
+        </div>
+        <div class="gab-hero__dots" role="tablist" aria-label="Choisir une photo">
+            <button type="button" class="gab-hero__dot is-active" data-hero-slider-target="dot" data-action="hero-slider#goTo" data-hero-slider-index-param="0" role="tab" aria-selected="true" aria-label="Photo 1 sur 3"></button>
+            <button type="button" class="gab-hero__dot" data-hero-slider-target="dot" data-action="hero-slider#goTo" data-hero-slider-index-param="1" role="tab" aria-selected="false" aria-label="Photo 2 sur 3"></button>
+            <button type="button" class="gab-hero__dot" data-hero-slider-target="dot" data-action="hero-slider#goTo" data-hero-slider-index-param="2" role="tab" aria-selected="false" aria-label="Photo 3 sur 3"></button>
         </div>
     </section>
 
@@ -44,36 +53,14 @@
                 </figcaption>
             </figure>
             <figure class="gab-card">
-                <img src="/img/mandrill-gabon.webp" alt="Mandrill, primate emblématique du Gabon" loading="lazy">
+                <img src="/img/Oligui-travaux.webp" alt="Visite de chantier d'infrastructures au Gabon" loading="lazy">
                 <figcaption>
-                    <span class="gab-card__title">Faune emblématique</span>
-                    <span class="gab-card__text">Gorilles, éléphants, mandrills : une biodiversité exceptionnelle.</span>
+                    <span class="gab-card__title">Gabon Développement</span>
+                    <span class="gab-card__text">Un pays en pleine construction, tourné vers l'avenir.</span>
                 </figcaption>
             </figure>
         </div>
     </section>
 
     <div class="gab-divider gab-divider--secondary" aria-hidden="true"></div>
-
-    <section class="gab-install" data-controller="pwa-install">
-        <h2 class="gab-install__title">Installez l'application sur votre téléphone</h2>
-        <p class="gab-install__lead">
-            Ajoutez Diaspora Gabonaise à votre écran d'accueil pour y accéder en un geste.
-        </p>
-
-        <md-outlined-button hidden data-pwa-install-target="installButton" data-action="click->pwa-install#install">
-            Installer l'application
-            <md-icon slot="icon">download</md-icon>
-        </md-outlined-button>
-
-        <p class="gab-install__hint" hidden data-pwa-install-target="iosInstructions">
-            Sur iPhone/iPad&nbsp;: appuyez sur <md-icon class="gab-install__inline-icon">ios_share</md-icon> puis « Sur l'écran d'accueil ».
-        </p>
-
-        <p class="gab-install__hint" hidden data-pwa-install-target="alreadyInstalled">
-            ✓ L'application est déjà installée sur cet appareil.
-        </p>
-    </section>
-
-    <div class="gab-divider gab-divider--tertiary" aria-hidden="true"></div>
 {% endblock %}
