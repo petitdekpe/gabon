@@ -83,6 +83,13 @@
   box-sizing: border-box;
 }
 
+/* Les composants @material/web fixent leur propre display sur :host ; sans
+   cette règle, l'attribut natif [hidden] est neutralisé et l'élément reste
+   visible et cliquable même quand on le "cache" en JS. */
+[hidden] {
+  display: none !important;
+}
+
 html,
 body {
   margin: 0;
