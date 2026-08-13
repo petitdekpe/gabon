@@ -36,6 +36,16 @@
         {% endif %}
     </head>
     <body>
+        <md-linear-progress
+            id="gab-page-loader"
+            class="gab-page-loader"
+            data-turbo-permanent
+            data-controller="page-loader"
+            indeterminate
+            hidden
+            aria-hidden="true"
+        ></md-linear-progress>
+
         <div class="gab-page">
             <div class="gab-flag-stripe" aria-hidden="true">
                 <span></span><span></span><span></span>

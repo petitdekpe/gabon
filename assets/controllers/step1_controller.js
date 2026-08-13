@@ -1,9 +1,12 @@
 import { Controller } from '@hotwired/stimulus';
+import { isValidPhoneNumber, parsePhoneNumberFromString } from 'libphonenumber-js';
+import { AFRICAN_PHONE_COUNTRIES, GABON_PHONE_COUNTRY, findPhoneCountry, flagEmoji } from '../data/phone_countries.js';
 
 /**
  * Écran 1 « Votre identité » : durée de séjour, statut des documents,
- * bascule "carte de résident non concerné", et validation progressive
- * avant soumission.
+ * bascule "carte de résident non concerné", validation progressive
+ * avant soumission, et assistance de saisie des numéros de téléphone
+ * (indicatif par pays, placeholder, formatage, validation).
  */
 export default class extends Controller {
     static targets = [
@@ -19,6 +22,11 @@ export default class extends Controller {
         'professionOtherWrapper',
         'residentCardNotApplicable',
         'residentCardFields',
+        'countrySelect',
+        'localPhoneCountrySelect',
+        'localPhoneField',
+        'gabonContactCountrySelect',
+        'gabonContactField',
     ];
 
     connect() {
@@ -26,6 +34,7 @@ export default class extends Controller {
         this.syncDocumentBadge('passport');
         this.syncDocumentBadge('residentCard');
         this.syncDocumentBadge('consularCard');
+        this.initPhoneCountries();
     }
 
     // --- 1. Durée de séjour --------------------------------------------------
@@ -82,6 +91,118 @@ export default class extends Controller {
         }
 
         return parts.join(' ');
+    }
+
+    // --- 1bis. Téléphones (indicatif pays, placeholder, formatage) -------------
+
+    buildPhoneCountryOption(country) {
+        const option = document.createElement('md-select-option');
+        option.value = country.code;
+        const headline = document.createElement('div');
+        headline.slot = 'headline';
+        headline.textContent = `${flagEmoji(country.code)} ${country.name} (+${country.callingCode})`;
+        option.appendChild(headline);
+
+        return option;
+    }
+
+    async initPhoneCountries() {
+        if (this.hasLocalPhoneCountrySelectTarget) {
+            const select = this.localPhoneCountrySelectTarget;
+
+            AFRICAN_PHONE_COUNTRIES.forEach((country) => {
+                select.appendChild(this.buildPhoneCountryOption(country));
+            });
+
+            // Le select Material Web (LitElement) n'assigne ses options slottées
+            // qu'après son propre cycle de rendu : attendre updateComplete avant
+            // de fixer la valeur, sinon elle est silencieusement ignorée.
+            await select.updateComplete;
+
+            const defaultCode = this.hasCountrySelectTarget ? this.countrySelectTarget.value : null;
+            const resolvedCode = findPhoneCountry(defaultCode) ? defaultCode : 'BJ';
+            select.value = resolvedCode;
+
+            await select.updateComplete;
+            this.updateLocalPhonePlaceholder(resolvedCode);
+        }
+
+        if (this.hasGabonContactCountrySelectTarget && GABON_PHONE_COUNTRY) {
+            const select = this.gabonContactCountrySelectTarget;
+            select.appendChild(this.buildPhoneCountryOption(GABON_PHONE_COUNTRY));
+
+            await select.updateComplete;
+            select.value = GABON_PHONE_COUNTRY.code;
+        }
+
+        if (this.hasGabonContactFieldTarget && GABON_PHONE_COUNTRY) {
+            this.gabonContactFieldTarget.placeholder = GABON_PHONE_COUNTRY.placeholder;
+        }
+    }
+
+    syncLocalPhoneCountry(event) {
+        if (!this.hasLocalPhoneCountrySelectTarget) {
+            return;
+        }
+
+        const code = event.currentTarget.value;
+        if (findPhoneCountry(code)) {
+            this.localPhoneCountrySelectTarget.value = code;
+            this.updateLocalPhonePlaceholder(code);
+        }
+    }
+
+    updateLocalPhonePlaceholder(code = this.localPhoneCountrySelectTarget?.value) {
+        if (!this.hasLocalPhoneCountrySelectTarget || !this.hasLocalPhoneFieldTarget) {
+            return;
+        }
+
+        const country = findPhoneCountry(code);
+        if (!country) {
+            return;
+        }
+
+        this.localPhoneFieldTarget.placeholder = country.placeholder;
+
+        if (!this.localPhoneFieldTarget.value?.trim()) {
+            this.localPhoneFieldTarget.value = `+${country.callingCode}`;
+        }
+    }
+
+    formatPhoneInput(event) {
+        const field = event.currentTarget;
+        const value = (field.value ?? '').trim();
+        if (!value) {
+            return;
+        }
+
+        const region = field === this.gabonContactFieldTarget
+            ? 'GA'
+            : this.localPhoneCountrySelectTarget?.value;
+
+        // Normalise au format E.164 (celui stocké et validé côté serveur) une
+        // fois la saisie terminée, quelle que soit la façon dont l'utilisateur
+        // a tapé son numéro (avec ou sans "+", avec ou sans le zéro national).
+        const parsed = parsePhoneNumberFromString(value, region);
+        if (parsed) {
+            field.value = parsed.number;
+        }
+    }
+
+    validatePhoneField(field, region, invalidFields) {
+        if (!field || field.disabled) {
+            return;
+        }
+
+        const value = (field.value ?? '').trim();
+        if (value === '' || isValidPhoneNumber(value, region)) {
+            field.error = false;
+            return;
+        }
+
+        field.error = true;
+        field.errorText = 'Ce numéro de téléphone n’est pas valide.';
+        invalidFields.push(field);
     }
 
     // --- 2. Statut des documents ----------------------------------------------
@@ -224,6 +345,9 @@ export default class extends Controller {
                 field.error = false;
             }
         });
+
+        this.validatePhoneField(this.hasLocalPhoneFieldTarget ? this.localPhoneFieldTarget : null, this.localPhoneCountrySelectTarget?.value, invalidFields);
+        this.validatePhoneField(this.hasGabonContactFieldTarget ? this.gabonContactFieldTarget : null, 'GA', invalidFields);
 
         this.formTarget.querySelectorAll('input[type="file"][required]').forEach((input) => {
             if (input.disabled) {

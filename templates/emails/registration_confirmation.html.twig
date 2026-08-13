@@ -1,19 +1,30 @@
 {% extends 'emails/_layout.html.twig' %}
 
 {% block body %}
-    <h1 style="font-size: 1.3rem;">Votre dossier a bien été enregistré</h1>
-    <p>Bonjour {{ registrant.firstName }} {{ registrant.lastName }},</p>
-    <p>
-        Merci pour votre inscription au recensement de la diaspora gabonaise. Votre dossier est désormais
-        enregistré sous la référence :
-    </p>
-    <p style="font-size: 1.6rem; font-weight: 700; color: #003f8a; margin: 16px 0;">{{ registrant.reference }}</p>
+	<h1 style="font-size: 1.3rem;">Votre dossier a bien été enregistré</h1>
+	<p>Bonjour
+		{{ registrant.firstName }}
+		{{ registrant.lastName }},</p>
+	<p>
+		Merci pour votre inscription au recensement de la diaspora gabonaise. Votre dossier est désormais
+		        enregistré sous la référence :
+	</p>
+	<p style="font-size: 1.6rem; font-weight: 700; color: #003f8a; margin: 16px 0;">{{ registrant.reference }}</p>
 
-    <table style="width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem;">
-        <tr><td style="padding: 4px 0; color: #5c6b64;">Profil</td><td style="padding: 4px 0;">{{ registrant.profileType.value == 'student' ? 'Étudiant' : (registrant.profileType.value == 'employee' ? 'Salarié du privé' : 'Entrepreneur') }}</td></tr>
-        <tr><td style="padding: 4px 0; color: #5c6b64;">Pays de résidence</td><td style="padding: 4px 0;">{{ registrant.country }}</td></tr>
-        <tr><td style="padding: 4px 0; color: #5c6b64;">Téléphone local</td><td style="padding: 4px 0;">{{ registrant.localPhone }}</td></tr>
-    </table>
+	<table style="width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem;">
+		<tr>
+			<td style="padding: 4px 0; color: #5c6b64;">Profil</td>
+			<td style="padding: 4px 0;">{{ registrant.profileType.value == 'student' ? 'Étudiant' : (registrant.profileType.value == 'employee' ? 'Salarié du privé' : 'Entrepreneur') }}</td>
+		</tr>
+		<tr>
+			<td style="padding: 4px 0; color: #5c6b64;">Pays de résidence</td>
+			<td style="padding: 4px 0;">{{ registrant.country }}</td>
+		</tr>
+		<tr>
+			<td style="padding: 4px 0; color: #5c6b64;">Téléphone local</td>
+			<td style="padding: 4px 0;">{{ registrant.localPhone }}</td>
+		</tr>
+	</table>
 
-    <p>Le Bureau Exécutif de l'AGB vous contactera prochainement.</p>
+	<p>Vous serez contacté ultérieurement.</p>
 {% endblock %}

@@ -154,4 +154,7 @@ return [
     '@material/web/divider/divider.js' => [
         'version' => '2.5.0',
     ],
+    'libphonenumber-js' => [
+        'version' => '1.13.10',
+    ],
 ];

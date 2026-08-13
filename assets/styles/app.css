@@ -231,6 +231,27 @@
   z-index: 1100;
 }
 
+/* Barre de chargement de page, affichée par le contrôleur "page-loader"
+   pendant les navigations/soumissions pilotées par Turbo. Placée au-dessus
+   de tout le reste (flash messages compris) pour rester visible. */
+.gab-page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1400;
+}
+
+.gab-page-loader[hidden] {
+  display: none;
+}
+
+/* On pilote nous-mêmes l'indicateur de chargement (barre ci-dessus) plutôt
+   que celui, peu visible, injecté par défaut par Turbo. */
+.turbo-progress-bar {
+  visibility: hidden;
+}
+
 .gab-flag-stripe span:nth-child(1) { background-color: var(--color-primary); }
 .gab-flag-stripe span:nth-child(2) { background-color: var(--color-secondary); }
 .gab-flag-stripe span:nth-child(3) { background-color: var(--color-tertiary); }

@@ -12,7 +12,7 @@ class RegistrationStep1ValidationTest extends AbstractRegistrationTestCase
             'lastName' => '',
             'firstName' => '',
             'email' => 'not-an-email',
-            'localPhone' => '0022912345678', // pas de '+' -> invalide au regard du regex E.164
+            'localPhone' => '0022912345678', // pas de '+' -> non reconnu par libphonenumber comme un numéro international
         ]);
 
         self::assertResponseStatusCodeSame(422);

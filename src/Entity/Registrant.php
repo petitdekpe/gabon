@@ -6,6 +6,7 @@ use App\Entity\Enum\AfricanCountry;
 use App\Entity\Enum\ProfileType;
 use App\Entity\Enum\RegistrantStatus;
 use App\Repository\RegistrantRepository;
+use App\Validator\PhoneNumber;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -14,8 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 class Registrant
 {
-    private const string PHONE_E164_REGEX = '/^\+[1-9]\d{1,14}$/';
-
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     private Uuid $id;
@@ -63,12 +62,12 @@ class Registrant
 
     #[ORM\Column(length: 20)]
     #[Assert\NotBlank]
-    #[Assert\Regex(pattern: self::PHONE_E164_REGEX, message: 'Le numéro doit être au format international E.164 (ex. +22912345678).')]
+    #[PhoneNumber]
     private ?string $localPhone = null;
 
     #[ORM\Column(length: 20)]
     #[Assert\NotBlank]
-    #[Assert\Regex(pattern: self::PHONE_E164_REGEX, message: 'Le numéro doit être au format international E.164 (ex. +24101234567).')]
+    #[PhoneNumber(region: 'GA', message: 'Le numéro doit être un numéro de téléphone gabonais valide (format international, ex. {{ example }}).')]
     private ?string $gabonContact = null;
 
     #[ORM\Column(type: 'date_immutable')]

@@ -90,10 +90,10 @@ class Step1IdentityType extends AbstractType
 
             // --- Téléphones ---
             ->add('localPhone', TelType::class, [
-                'label' => 'Téléphone local (E.164)',
+                'label' => 'Téléphone local',
             ])
             ->add('gabonContact', TelType::class, [
-                'label' => 'Contact au Gabon (E.164)',
+                'label' => 'Contact au Gabon',
             ])
 
             // --- Séjour ---

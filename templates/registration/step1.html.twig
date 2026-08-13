@@ -29,13 +29,13 @@
         <md-outlined-card class="gab-section">
             <h2 class="gab-section__title">Identité civile</h2>
             <div class="gab-grid gab-grid--2">
-                {{ f.select_field(form.country) }}
+                {{ f.select_field(form.country, 'data-step1-target="countrySelect" data-action="change->step1#syncLocalPhoneCountry"', true) }}
                 {{ f.text_field(form.lastName) }}
                 {{ f.text_field(form.firstName) }}
                 {{ f.text_field(form.email, 'email') }}
                 {{ f.text_field(form.birthDate, 'date') }}
                 {{ f.text_field(form.birthPlace) }}
-                {{ f.select_field(form.birthCountry) }}
+                {{ f.select_field(form.birthCountry, '', true) }}
 
                 <div class="gab-field-group">
                     {{ f.select_field(form.profession, 'data-action="change->step1#toggleProfessionOther"') }}
@@ -50,8 +50,26 @@
         <md-outlined-card class="gab-section">
             <h2 class="gab-section__title">Téléphones</h2>
             <div class="gab-grid gab-grid--2">
-                {{ f.text_field(form.localPhone, 'tel') }}
-                {{ f.text_field(form.gabonContact, 'tel') }}
+                <div class="gab-field-group">
+                    <md-outlined-select
+                        class="gab-field"
+                        label="Indicatif pays — téléphone local"
+                        id="local_phone_country"
+                        data-step1-target="localPhoneCountrySelect"
+                        data-action="change->step1#updateLocalPhonePlaceholder"
+                    ></md-outlined-select>
+                    {{ f.text_field(form.localPhone, 'tel', 'data-step1-target="localPhoneField" data-action="blur->step1#formatPhoneInput"') }}
+                </div>
+                <div class="gab-field-group">
+                    <md-outlined-select
+                        class="gab-field"
+                        label="Indicatif pays"
+                        id="gabon_contact_country"
+                        disabled
+                        data-step1-target="gabonContactCountrySelect"
+                    ></md-outlined-select>
+                    {{ f.text_field(form.gabonContact, 'tel', 'data-step1-target="gabonContactField" data-action="blur->step1#formatPhoneInput"') }}
+                </div>
             </div>
         </md-outlined-card>
 
@@ -93,7 +111,7 @@
 
             {{ f.checkbox_field(form.residentCardNotApplicable, 'data-action="change->step1#toggleResidentCard" data-step1-target="residentCardNotApplicable"') }}
 
-            <div class="gab-conditional" data-step1-target="residentCardFields"
+            <div class="gab-conditional gab-conditional--upload" data-step1-target="residentCardFields"
                  {% if form.residentCardNotApplicable.vars.checked %}hidden{% endif %}>
                 <div class="gab-grid gab-grid--2">
                     {{ f.text_field(form.residentCardNumber) }}

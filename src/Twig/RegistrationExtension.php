@@ -20,6 +20,7 @@ class RegistrationExtension extends AbstractExtension
         return [
             new TwigFilter('stay_duration', $this->formatStayDuration(...)),
             new TwigFilter('country_name', $this->formatCountryName(...)),
+            new TwigFilter('country_flag', $this->formatCountryFlag(...)),
             new TwigFilter('doc_status_badge', $this->documentStatusService->getStatusBadgeHtml(...)),
         ];
     }
@@ -35,6 +36,29 @@ class RegistrationExtension extends AbstractExtension
         } catch (\Throwable) {
             return $isoCode;
         }
+    }
+
+    /**
+     * Convertit un code ISO 3166-1 alpha-2 (ex. "GA") en emoji drapeau (🇬🇦)
+     * en combinant les deux "regional indicator symbols" Unicode correspondants.
+     */
+    public function formatCountryFlag(?string $isoCode): string
+    {
+        if ($isoCode === null || 2 !== \strlen($isoCode)) {
+            return '';
+        }
+
+        $isoCode = strtoupper($isoCode);
+        if (!ctype_alpha($isoCode)) {
+            return '';
+        }
+
+        $flag = '';
+        foreach (str_split($isoCode) as $letter) {
+            $flag .= mb_chr(127397 + \ord($letter), 'UTF-8');
+        }
+
+        return $flag;
     }
 
     public function getFunctions(): array

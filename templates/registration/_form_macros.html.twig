@@ -13,7 +13,7 @@
     ></md-outlined-text-field>
 {% endmacro %}
 
-{% macro select_field(field, attrs = '') %}
+{% macro select_field(field, attrs = '', flags = false) %}
     {% do field.setRendered %}
     <md-outlined-select
         class="gab-field"
@@ -26,7 +26,7 @@
     >
         {% for choice in field.vars.choices %}
             <md-select-option value="{{ choice.value }}" {{ choice.value == field.vars.value ? 'selected' : '' }}>
-                <div slot="headline">{{ choice.label }}</div>
+                <div slot="headline">{{ flags ? (choice.value|country_flag ~ ' ' ~ choice.label) : choice.label }}</div>
             </md-select-option>
         {% endfor %}
     </md-outlined-select>

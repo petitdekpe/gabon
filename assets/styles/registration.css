@@ -84,6 +84,13 @@ md-outlined-card.gab-section {
   transition: max-height 200ms ease, opacity 150ms ease, margin 200ms ease;
 }
 
+/* Variante pour les blocs qui contiennent plus qu'un simple champ "Autre"
+   (ex. carte de résident : 3 champs + zone d'upload), sous peine de voir
+   leur contenu tronqué par le max-height générique ci-dessus. */
+.gab-conditional--upload {
+  max-height: 520px;
+}
+
 .gab-conditional[hidden] {
   display: block;
   max-height: 0;

@@ -10,6 +10,7 @@
         "doctrine/doctrine-bundle": "^2.19",
         "doctrine/doctrine-migrations-bundle": "^3.7",
         "doctrine/orm": "^3.6",
+        "giggsey/libphonenumber-for-php": "^9.0",
         "league/csv": "^9.28",
         "phpdocumentor/reflection-docblock": "^6.0",
         "phpoffice/phpspreadsheet": "^5.9",
