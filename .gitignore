@@ -15,7 +15,9 @@
 ###< phpunit/phpunit ###
 
 ###> symfony/asset-mapper ###
-/public/assets/
+# /public/assets/ est committé volontairement : le mutualisé Plesk n'a pas
+# d'accès CLI pour lancer `asset-map:compile` en prod, donc les assets
+# compilés sont générés en local et poussés tels quels.
 /assets/vendor/
 ###< symfony/asset-mapper ###
 

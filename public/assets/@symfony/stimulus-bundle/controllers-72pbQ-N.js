@@ -1,0 +1,12 @@
+import controller_0 from "../ux-turbo/turbo_controller.js";
+import controller_1 from "../../controllers/admin_registrant_controller.js";
+import controller_2 from "../../controllers/flash_controller.js";
+import controller_3 from "../../controllers/hello_controller.js";
+import controller_4 from "../../controllers/hero_slider_controller.js";
+import controller_5 from "../../controllers/page_loader_controller.js";
+import controller_6 from "../../controllers/pwa_install_controller.js";
+import controller_7 from "../../controllers/step1_controller.js";
+import controller_8 from "../../controllers/step2_controller.js";
+export const eagerControllers = {"symfony--ux-turbo--turbo-core": controller_0, "admin-registrant": controller_1, "flash": controller_2, "hello": controller_3, "hero-slider": controller_4, "page-loader": controller_5, "pwa-install": controller_6, "step1": controller_7, "step2": controller_8};
+export const lazyControllers = {"csrf-protection": () => import("../../controllers/csrf_protection_controller.js")};
+export const isApplicationDebug = false;

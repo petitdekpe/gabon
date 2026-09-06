@@ -1,0 +1,101 @@
+/**
+ * Design tokens — Recensement de la diaspora gabonaise
+ * Palette dérivée du drapeau du Gabon, mappée sur les rôles de couleur MD3.
+ * @material/web lit les rôles --md-sys-color-* automatiquement.
+ */
+:root {
+  /* --- Palette brute (drapeau du Gabon) --- */
+  --color-primary: #009e60;
+  --color-secondary: #fcd116;
+  --color-tertiary: #003f8a;
+  --color-on-primary: #ffffff;
+  --color-surface: #f6faf8;
+  --color-on-surface: #1a2e25;
+  --color-error: #b91c1c;
+
+  /* --- Rôles MD3 : Primary (vert) --- */
+  --md-sys-color-primary: var(--color-primary);
+  --md-sys-color-on-primary: var(--color-on-primary);
+  --md-sys-color-primary-container: #b6f2d3;
+  --md-sys-color-on-primary-container: #00210f;
+  --md-sys-color-inverse-primary: #6adfa4;
+
+  /* --- Rôles MD3 : Secondary (jaune or) --- */
+  --md-sys-color-secondary: #715c00;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: var(--color-secondary);
+  --md-sys-color-on-secondary-container: #241a00;
+
+  /* --- Rôles MD3 : Tertiary (bleu) --- */
+  --md-sys-color-tertiary: var(--color-tertiary);
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #d3e2ff;
+  --md-sys-color-on-tertiary-container: #001a41;
+
+  /* --- Rôles MD3 : Error --- */
+  --md-sys-color-error: var(--color-error);
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #f9dedc;
+  --md-sys-color-on-error-container: #410e0b;
+
+  /* --- Rôles MD3 : Surface & fond --- */
+  --md-sys-color-surface: var(--color-surface);
+  --md-sys-color-on-surface: var(--color-on-surface);
+  --md-sys-color-surface-dim: #d6dbd6;
+  --md-sys-color-surface-bright: var(--color-surface);
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #f0f5f1;
+  --md-sys-color-surface-container: #eaefeb;
+  --md-sys-color-surface-container-high: #e4e9e5;
+  --md-sys-color-surface-container-highest: #dee3df;
+  --md-sys-color-on-surface-variant: #3f4945;
+  --md-sys-color-background: var(--color-surface);
+  --md-sys-color-on-background: var(--color-on-surface);
+
+  /* --- Rôles MD3 : Outline & divers --- */
+  --md-sys-color-outline: #6f7975;
+  --md-sys-color-outline-variant: #bfc9c4;
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-inverse-surface: #2e332f;
+  --md-sys-color-inverse-on-surface: #eff2ed;
+
+  /* --- Tokens applicatifs --- */
+  --gab-topbar-stripe-height: 6px;
+  --gab-header-height: 64px;
+  --gab-radius-sm: 8px;
+  --gab-radius-md: 16px;
+  --gab-radius-lg: 28px;
+  --gab-space-1: 4px;
+  --gab-space-2: 8px;
+  --gab-space-3: 16px;
+  --gab-space-4: 24px;
+  --gab-space-5: 32px;
+  --gab-max-width: 1080px;
+  --gab-font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --gab-font-display: 'Fraunces', 'Georgia', serif;
+
+  /* --- Vert profond (sous-bois), utilisé pour les voiles sur photo --- */
+  --gab-ink-deep: #04211a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Les composants @material/web fixent leur propre display sur :host ; sans
+   cette règle, l'attribut natif [hidden] est neutralisé et l'élément reste
+   visible et cliquable même quand on le "cache" en JS. */
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: var(--gab-font-family);
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+}
