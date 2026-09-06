@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Security\CspNonceGenerator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -17,6 +18,7 @@ class SecurityHeadersListener
     public function __construct(
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
+        private readonly CspNonceGenerator $cspNonceGenerator,
     ) {
     }
 
@@ -33,9 +35,11 @@ class SecurityHeadersListener
         $headers->set('Permissions-Policy', 'geolocation=(), camera=(), microphone=()');
 
         if (!$this->debug) {
+            $nonce = $this->cspNonceGenerator->getNonce();
+
             $headers->set('Content-Security-Policy', implode('; ', [
                 "default-src 'self'",
-                "script-src 'self' https://ga.jspm.io",
+                "script-src 'self' 'nonce-{$nonce}' https://ga.jspm.io",
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
                 "font-src 'self' https://fonts.gstatic.com",
                 "img-src 'self' data:",

@@ -11,5 +11,14 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    // Les requêtes de préchargement (ex. <link rel="modulepreload"> généré par
+    // AssetMapper) arrivent avec cache "only-if-cached" + mode "no-cors" ; un
+    // simple fetch(event.request) les relaie telles quelles, ce que fetch()
+    // refuse ("'only-if-cached' can be set only if 'mode' is 'same-origin'").
+    // On laisse alors le navigateur gérer la requête nativement.
+    if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+        return;
+    }
+
     event.respondWith(fetch(event.request));
 });
