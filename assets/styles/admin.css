@@ -256,6 +256,44 @@ md-outlined-card.gab-section {
 .gab-chip--student { background-color: color-mix(in srgb, var(--color-primary) 16%, transparent); color: #00532f; }
 .gab-chip--employee { background-color: color-mix(in srgb, var(--color-secondary) 25%, transparent); color: #7a4a00; }
 .gab-chip--entrepreneur { background-color: color-mix(in srgb, var(--color-tertiary) 16%, transparent); color: var(--color-tertiary); }
+.gab-chip:not([class*="gab-chip--"]) { background-color: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface-variant); }
+
+/* --- Images du site --- */
+.gab-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--gab-space-3);
+}
+
+.gab-image-card {
+  display: grid;
+  gap: var(--gab-space-2);
+}
+
+.gab-image-card__preview {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--gab-radius-sm);
+}
+
+.gab-image-card__meta {
+  display: grid;
+  gap: 4px;
+}
+
+.gab-image-card__form {
+  display: flex;
+  align-items: center;
+  gap: var(--gab-space-2);
+  flex-wrap: wrap;
+}
+
+.gab-image-card__form input[type="file"] {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8rem;
+}
 
 /* --- Pagination --- */
 .gab-pagination {

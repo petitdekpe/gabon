@@ -1,0 +1,54 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Images du site · Admin{% endblock %}
+
+{% block breadcrumb %}<span>/ Images du site</span>{% endblock %}
+
+{% block admin_content %}
+    <div class="gab-admin-page-header">
+        <div>
+            <h1 class="gab-admin-title">Images du site</h1>
+            <p class="gab-admin-subtitle">
+                Remplacez les photos affichées sur le site public. Chaque image est automatiquement
+                convertie au format WebP lors de l'envoi.
+            </p>
+        </div>
+    </div>
+
+    <div class="gab-image-grid">
+        {% for item in slots %}
+            <md-outlined-card class="gab-section gab-image-card">
+                <img class="gab-image-card__preview" src="{{ item.url }}" alt="" loading="lazy">
+
+                <div class="gab-image-card__meta">
+                    <h2 class="gab-section__title">{{ item.label }}</h2>
+                    {% if item.isOverridden %}
+                        <span class="gab-chip gab-chip--student">Personnalisée</span>
+                        <p class="gab-admin-subtitle">
+                            Mise à jour le {{ item.updatedAt|date('d/m/Y à H:i') }}{% if item.updatedBy %} par {{ item.updatedBy }}{% endif %}
+                        </p>
+                    {% else %}
+                        <span class="gab-chip">Image par défaut</span>
+                    {% endif %}
+                </div>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <form class="gab-image-card__form" method="post" action="{{ path('admin_site_image_upload', {slot: item.slot}) }}" enctype="multipart/form-data">
+                        <input type="hidden" name="_token" value="{{ csrf_token('site-image-upload-' ~ item.slot) }}">
+                        <input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif" required>
+                        <md-filled-button type="submit">
+                            Remplacer
+                            <md-icon slot="icon">upload</md-icon>
+                        </md-filled-button>
+                    </form>
+                    {% if item.isOverridden %}
+                        <form class="gab-image-card__form" method="post" action="{{ path('admin_site_image_reset', {slot: item.slot}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('site-image-reset-' ~ item.slot) }}">
+                            <md-outlined-button type="submit">Réinitialiser par défaut</md-outlined-button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </md-outlined-card>
+        {% endfor %}
+    </div>
+{% endblock %}

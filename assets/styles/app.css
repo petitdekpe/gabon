@@ -219,6 +219,62 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
+/* FAQ — accordéon natif (details/summary) */
+.gab-faq {
+  display: grid;
+  text-align: center;
+  gap: var(--gab-space-2);
+  padding: var(--gab-space-4) 0;
+}
+
+.gab-faq__list {
+  display: grid;
+  gap: var(--gab-space-2);
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: left;
+}
+
+.gab-faq__item {
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--gab-radius-md);
+  background-color: var(--md-sys-color-surface-container-lowest);
+  overflow: hidden;
+}
+
+.gab-faq__item summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gab-space-2);
+  padding: var(--gab-space-3);
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.gab-faq__item summary::-webkit-details-marker { display: none; }
+
+.gab-faq__item summary::after {
+  content: '+';
+  flex: none;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--color-primary);
+  transition: transform 150ms ease;
+}
+
+.gab-faq__item[open] summary::after {
+  content: '−';
+}
+
+.gab-faq__item p {
+  margin: 0;
+  padding: 0 var(--gab-space-3) var(--gab-space-3);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
 /* Bandeau tricolore du drapeau gabonais, fixé en haut de la fenêtre */
 .gab-flag-stripe {
   position: fixed;
@@ -288,19 +344,11 @@
 }
 
 .gab-topbar__brand-mark {
-  display: inline-flex;
-  width: 28px;
-  height: 20px;
-  border-radius: 4px;
-  overflow: hidden;
   flex: none;
-  box-shadow: 0 0 0 1px var(--md-sys-color-outline-variant);
+  width: 36px;
+  height: 35px;
+  object-fit: contain;
 }
-
-.gab-topbar__brand-mark span { flex: 1; }
-.gab-topbar__brand-mark span:nth-child(1) { background-color: var(--color-primary); }
-.gab-topbar__brand-mark span:nth-child(2) { background-color: var(--color-secondary); }
-.gab-topbar__brand-mark span:nth-child(3) { background-color: var(--color-tertiary); }
 
 .gab-topbar__nav {
   display: flex;

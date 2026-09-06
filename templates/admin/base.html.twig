@@ -35,6 +35,10 @@
                         <div slot="headline">Export</div>
                     </md-list-item>
                 {% endif %}
+                <md-list-item type="link" href="{{ path('admin_site_images') }}" class="gab-admin-rail__item {{ current_route == 'admin_site_images' ? 'is-active' : '' }}">
+                    <md-icon slot="start">image</md-icon>
+                    <div slot="headline">Images du site</div>
+                </md-list-item>
                 <md-list-item type="link" href="{{ path('admin_settings') }}" class="gab-admin-rail__item {{ current_route == 'admin_settings' ? 'is-active' : '' }}">
                     <md-icon slot="start">settings</md-icon>
                     <div slot="headline">Paramètres</div>
